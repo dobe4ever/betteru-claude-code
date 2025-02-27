@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Switch } from "@/components/ui/switch"
 import { Button } from "@/components/ui/button"
 import { Check, Flame, Pin, AlarmClock, Repeat, Star, ChevronDown, Pen, Trash2, Settings, X, Clock } from "lucide-react"
@@ -11,16 +11,34 @@ import { StrikeCounter } from "@/components/ui/strike-counter"
 
 interface HabitCardProps {
   title: string
-  key: string
+  key?: string
+  completed?: boolean
+  onCompletedChange?: (completed: boolean) => void
 }
 
-export function HabitCard({ title }: HabitCardProps) {
-  const [isCompleted, setIsCompleted] = useState(false)
+export function HabitCard({ 
+  title, 
+  completed = false,
+  onCompletedChange
+}: HabitCardProps) {
+  const [isCompleted, setIsCompleted] = useState(completed)
   const [strikeCount, setStrikeCount] = useState(0)
   const [isExpanded, setIsExpanded] = useState(false)
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
 
-  const toggleCompleted = () => setIsCompleted((prev) => !prev)
+  // Update internal state when prop changes
+  useEffect(() => {
+    setIsCompleted(completed);
+  }, [completed]);
+  
+  const toggleCompleted = () => {
+    const newValue = !isCompleted
+    setIsCompleted(newValue)
+    if (onCompletedChange) {
+      onCompletedChange(newValue)
+    }
+  }
+  
   const incrementStrike = () => setStrikeCount((prev) => prev + 1)
 
   return (

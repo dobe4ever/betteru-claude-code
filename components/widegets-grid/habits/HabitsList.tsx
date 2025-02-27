@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Eye, EyeOff } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { HabitCard } from "./HabitCard"
@@ -18,11 +18,17 @@ interface HabitsListProps {
   onAddCard: (title: string) => void
 }
 
-export function HabitsList({ cards, onAddCard }: HabitsListProps) {
+export function HabitsList({ cards: initialCards, onAddCard }: HabitsListProps) {
   const [selectedDate, setSelectedDate] = useState(new Date())
-  const [isVisible, setIsVisible] = useState(true)
+  const [showCompleted, setShowCompleted] = useState(true)
   const [isAdding, setIsAdding] = useState(false)
   const [newCardTitle, setNewCardTitle] = useState("")
+  const [cards, setCards] = useState(initialCards)
+  
+  // Update local cards state when prop changes
+  useEffect(() => {
+    setCards(initialCards);
+  }, [initialCards]);
 
   const handleAddCard = () => {
     if (newCardTitle.trim()) {
@@ -35,6 +41,19 @@ export function HabitsList({ cards, onAddCard }: HabitsListProps) {
   const handleMenuSelect = (option: string) => {
     setIsAdding(true)
   }
+  
+  const handleCompletedChange = (id: string, completed: boolean) => {
+    setCards(prevCards => 
+      prevCards.map(card => 
+        card.id === id ? { ...card, completed } : card
+      )
+    )
+  }
+  
+  // Filter cards based on the showCompleted state
+  const filteredCards = showCompleted 
+    ? cards // Show all cards
+    : cards.filter(card => !card.completed) // Show only incomplete cards
 
   return (
     <div className="flex flex-col h-full bg-white border rounded-3xl">
@@ -49,8 +68,13 @@ export function HabitsList({ cards, onAddCard }: HabitsListProps) {
       {/* Scrollable content */}
       <div className="flex-1 overflow-y-auto min-h-0">
         <div className="p-2">
-          {isVisible && cards.map((card) => (
-            <HabitCard key={card.id} title={card.title} />
+          {filteredCards.map((card) => (
+            <HabitCard 
+              key={card.id} 
+              title={card.title} 
+              completed={card.completed}
+              onCompletedChange={(completed) => handleCompletedChange(card.id, completed)}
+            />
           ))}
           {isAdding && (
             <div className="m-2">
@@ -78,10 +102,11 @@ export function HabitsList({ cards, onAddCard }: HabitsListProps) {
         <Button 
             variant="ghost" 
             size="sm" 
-            onClick={() => setIsVisible(!isVisible)} 
+            onClick={() => setShowCompleted(!showCompleted)} 
             className="p-1"
+            title={showCompleted ? "Hide completed habits" : "Show completed habits"}
           >
-            {isVisible ? (
+            {showCompleted ? (
               <Eye className="h-5 w-5 text-gray-600" />
             ) : (
               <EyeOff className="h-5 w-5 text-gray-600" />

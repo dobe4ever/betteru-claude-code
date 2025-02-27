@@ -7,13 +7,13 @@ import { useState } from "react"
 import { ChallengeCard } from "./ChallengeCard"
 import { HabitsList } from "./HabitsList"
 
-export const HabitsFull: React.FC = () => {
-  interface HabitCard {
-    id: string
-    title: string
-    completed: boolean
-  }
+interface HabitCard {
+  id: string
+  title: string
+  completed: boolean
+}
 
+export const HabitsFull: React.FC = () => {
   const [cards, setCards] = useState<HabitCard[]>([
     { id: "1", title: "Morning Meditation", completed: false },
     { id: "2", title: "Read for 30 minutes", completed: true },
@@ -28,7 +28,7 @@ export const HabitsFull: React.FC = () => {
   ])
 
    const handleAddCard = (title: string) => {
-    setCards([...cards, { id: String(Date.now()), title, completed: Boolean() }])
+    setCards([...cards, { id: String(Date.now()), title, completed: false }])
   }
 
   return (
