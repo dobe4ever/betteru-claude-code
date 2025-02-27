@@ -39,17 +39,13 @@ export function EditProfile() {
         throw authError
       }
       
-      // Also update the profile in the profiles table
-      if (user?.id) {
-        await upsertProfile({
-          id: user.id,
-          username,
-          avatar_url: avatarUrl,
-          created_at: new Date().toISOString()
-        })
-      }
-      
       setMessage({ text: "Profile updated successfully!", type: "success" })
+      
+      // Close modal after successful update (after brief delay to show success message)
+      setTimeout(() => {
+        window.dispatchEvent(new CustomEvent('close-modal'))
+      }, 1500)
+      
     } catch (err: any) {
       setMessage({ text: err.message || "An unexpected error occurred", type: "error" })
     } finally {
@@ -92,6 +88,10 @@ export function EditProfile() {
     } finally {
       setIsLoading(false)
     }
+  }
+  
+  const handleCancel = () => {
+    window.dispatchEvent(new CustomEvent('close-modal'))
   }
   
   return (
@@ -139,7 +139,15 @@ export function EditProfile() {
             />
           </div>
           
-          <div className="pt-4">
+          <div className="pt-4 flex gap-4">
+            <Button 
+              type="button" 
+              variant="outline"
+              className="w-full" 
+              onClick={handleCancel}
+            >
+              Cancel
+            </Button>
             <Button 
               type="submit" 
               className="w-full" 

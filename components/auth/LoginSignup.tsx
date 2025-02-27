@@ -164,10 +164,12 @@ export function LoginSignup() {
               onClick={async () => {
                 try {
                   setIsLoading(true)
+                  setError(null)
+                  
                   const { data, error } = await supabase.auth.signInWithOAuth({
                     provider: 'google',
                     options: {
-                      redirectTo: window.location.origin
+                      redirectTo: `${window.location.origin}/auth/callback`
                     }
                   })
                   

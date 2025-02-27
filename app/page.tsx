@@ -52,8 +52,16 @@ export default function Home() {
       setActiveModalFull("editProfile")
     }
     
+    const handleCloseModal = () => {
+      setActiveModalFull(null)
+    }
+    
     window.addEventListener('open-edit-profile', handleOpenEditProfile)
-    return () => window.removeEventListener('open-edit-profile', handleOpenEditProfile)
+    window.addEventListener('close-modal', handleCloseModal)
+    return () => {
+      window.removeEventListener('open-edit-profile', handleOpenEditProfile)
+      window.removeEventListener('close-modal', handleCloseModal)
+    }
   }, [])
 
   const openModalFull = (ModalFullName: string) => {
