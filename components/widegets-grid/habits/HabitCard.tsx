@@ -18,16 +18,10 @@ export function HabitCard({ title }: HabitCardProps) {
   const [isCompleted, setIsCompleted] = useState(false)
   const [strikeCount, setStrikeCount] = useState(0)
   const [isExpanded, setIsExpanded] = useState(false)
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false)
 
   const toggleCompleted = () => setIsCompleted((prev) => !prev)
   const incrementStrike = () => setStrikeCount((prev) => prev + 1)
-
-  const handleDayToggle = (day: keyof typeof selectedDays) => {
-    setSelectedDays((prev) => ({
-      ...prev,
-      [day]: !prev[day],
-    }))
-  }
 
   return (
     <>
@@ -142,7 +136,10 @@ export function HabitCard({ title }: HabitCardProps) {
       </div>
       
       {/* Settings Modal */}
-      <HabitSettingsModal />
+      <HabitSettingsModal 
+        isOpen={isSettingsOpen}
+        onOpenChange={setIsSettingsOpen}
+      />
     </>
   )
 }

@@ -13,9 +13,13 @@ import { Switch } from "@/components/ui/switch"
 import { Button } from "@/components/ui/button"
 import { Check, Flame, Pin, AlarmClock, Repeat, Star, ChevronDown, Pen, Trash2, Settings, X, Clock } from "lucide-react"
 
-export function HabitSettingsModal() {
+interface HabitSettingsModalProps {
+  isOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}
 
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false)
+export function HabitSettingsModal({ isOpen = false, onOpenChange }: HabitSettingsModalProps) {
+  const [isSettingsOpen, setIsSettingsOpen] = useState(isOpen)
   const [isDaily, setIsDaily] = useState(true)
   const [selectedDays, setSelectedDays] = useState({
     mon: true,
@@ -27,8 +31,26 @@ export function HabitSettingsModal() {
     sun: false,
     }
   )
+  
+  const handleDayToggle = (day: keyof typeof selectedDays) => {
+    setSelectedDays((prev) => ({
+      ...prev,
+      [day]: !prev[day],
+    }))
+  }
+  // Use the props if provided, otherwise use local state
+  const dialogOpen = onOpenChange ? isOpen : isSettingsOpen;
+  
+  const handleOpenChange = (open: boolean) => {
+    if (onOpenChange) {
+      onOpenChange(open);
+    } else {
+      setIsSettingsOpen(open);
+    }
+  };
+  
   return (
-    <AlertDialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
+    <AlertDialog open={dialogOpen} onOpenChange={handleOpenChange}>
         <AlertDialogContent className="max-w-md rounded-xl p-0 overflow-hidden">
           <div className="bg-orange-50 p-4">
             <div className="flex justify-between items-center">
@@ -107,7 +129,7 @@ export function HabitSettingsModal() {
           {/* Footer */}
           <AlertDialogFooter>
             <Button
-              onClick={() => setIsSettingsOpen(false)}
+              onClick={() => handleOpenChange(false)}
               type="submit"
               className="w-full"
             >
