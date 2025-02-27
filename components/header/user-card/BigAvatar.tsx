@@ -1,3 +1,5 @@
+// components/header/user-card/BigAvatar.tsx
+
 "use client"
 
 import { useAuth } from "@/components/auth/AuthProvider"

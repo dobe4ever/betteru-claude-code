@@ -1,3 +1,5 @@
+// components/widegets-grid/habits/HabitCard.tsx
+
 "use client"
 
 import { useState, useEffect } from "react"

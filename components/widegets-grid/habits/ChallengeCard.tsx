@@ -1,10 +1,11 @@
+// components/widegets-grid/habits/ChallengeCard.tsx
+
 "use client"
 
 // ChallengeCard.tsx
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { SetChallenge } from "./SetChallenge"
-import { CircularSlider } from "./CircularSlider"
 
 interface ChallengeCardProps {
   onStart?: (settings: { intensity: number; duration: number }) => void

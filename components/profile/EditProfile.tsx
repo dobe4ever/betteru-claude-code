@@ -1,3 +1,5 @@
+// components/profile/EditProfile.tsx
+
 "use client"
 
 import { useState, useEffect } from "react"
