@@ -1,4 +1,6 @@
 // components/header/top-bar/profile-btn.tsx
+"use client"
+
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -9,13 +11,13 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { LogOut, Edit, Crown } from "lucide-react"
 import { BigAvatar } from "../user-card/BigAvatar"
-
-interface ProfileBtnProps {
-  username: string
-  avatarUrl: string
-}
+import { useAuth } from "@/components/auth/AuthProvider"
 
 export function ProfileBtn() {
+  const { user, signOut } = useAuth()
+  const username = user?.user_metadata?.username || "User"
+  const email = user?.email || "email@example.com"
+  
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -24,28 +26,27 @@ export function ProfileBtn() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-62 p-3">
-        <DropdownMenuItem className="text-md text-gray-500 p-2">email@gmail.com</DropdownMenuItem>
+        <DropdownMenuItem className="text-md text-gray-500 p-2">{email}</DropdownMenuItem>
         <DropdownMenuItem className="flex flex-row">
-          <div className="flex justify-between items-center">
-            <BigAvatar classnames="size-10 border-2 rounded-full border-white mr-2" />
-            <span className="flex flex-col gap-0 ml-">
-              <p className="text-md">username</p>
-              <p className="text-gray-500">Free plan</p>
-            </span>
+          <div className="flex items-center">
+            <BigAvatar classnames="size-10 border-2 rounded-full border-white mr-3" />
+            <div className="flex flex-col">
+              <p className="text-md font-medium">{username}</p>
+              <p className="text-gray-500 text-sm whitespace-nowrap">Free plan</p>
+            </div>
           </div>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
           <Crown className="mr-2 h-4 w-4" /> Upgrade to Premium
         </DropdownMenuItem>
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={() => window.dispatchEvent(new CustomEvent('open-edit-profile'))}>
           <Edit className="mr-2 h-4 w-4" /> Edit Profile
         </DropdownMenuItem>
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={signOut}>
           <LogOut className="mr-2 h-4 w-4" /> Log out
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )
 }
-

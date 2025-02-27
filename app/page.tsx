@@ -16,6 +16,8 @@ import { CoursesFull } from "@/components/widegets-grid/courses/CoursesFull"
 import { WheelFull } from "@/components/widegets-grid/wheel/WheelFull"
 import { ChatbotButton } from "@/components/floating-btn/ChatbotButton"
 import { ChatbotFull } from "@/components/floating-btn/ChatbotFull"
+import { EditProfile } from "@/components/profile/EditProfile"
+import { AuthProvider } from "@/components/auth/AuthProvider"
 
 
 export default function Home() {
@@ -44,6 +46,15 @@ export default function Home() {
       document.body.classList.remove("no-scroll")
     }
   }, [activeModalFull])
+  
+  useEffect(() => {
+    const handleOpenEditProfile = () => {
+      setActiveModalFull("editProfile")
+    }
+    
+    window.addEventListener('open-edit-profile', handleOpenEditProfile)
+    return () => window.removeEventListener('open-edit-profile', handleOpenEditProfile)
+  }, [])
 
   const openModalFull = (ModalFullName: string) => {
     setActiveModalFull(ModalFullName)
@@ -54,50 +65,53 @@ export default function Home() {
   }
 
   return (
-    <div className="relative max-h-screen w-full bg-gradient-orange">
+    <AuthProvider>
+      <div className="relative max-h-screen w-full bg-gradient-orange">
 
-      <ChatbotButton onClick={() => openModalFull("chatbot")} />
+        <ChatbotButton onClick={() => openModalFull("chatbot")} />
 
-      <div ref={headerRef} className="relative z-10">
-        <Header />
-        <div
-          className="absolute top-0 w-full h-[450px] bg-white pointer-events-none"
-          style={{ opacity: fadePercentage / 100, zIndex: 20 }}
-        />
+        <div ref={headerRef} className="relative z-10">
+          <Header />
+          <div
+            className="absolute top-0 w-full h-[450px] bg-white pointer-events-none"
+            style={{ opacity: fadePercentage / 100, zIndex: 20 }}
+          />
+        </div>
+
+        <div className="sticky top-0 z-30">
+          <StickyTop />
+        </div>
+
+        <div className="relative z-20">
+          <WidgetsGrid
+            onHabitsClick={() => openModalFull("habits")}
+            onTodosClick={() => openModalFull("todos")}
+            onCheckinClick={() => openModalFull("checkin")}
+            onAnalyticsClick={() => openModalFull("analytics")}
+            onWheelClick={() => openModalFull("wheel")}
+            onBadgesClick={() => openModalFull("badges")}
+            onAdsClick={() => openModalFull("ads")}
+            onShopClick={() => openModalFull("shop")}
+            onCoursesClick={() => openModalFull("courses")}
+          />
+        </div>
+
+        {activeModalFull && (
+          <ModalFull onClose={closeModalFull}>
+            {activeModalFull === "habits" && <HabitsFull />}
+            {activeModalFull === "todos" && <TodosFull />}
+            {activeModalFull === "checkin" && <CheckinFull />}
+            {activeModalFull === "analytics" && <AnalyticsFull />}
+            {activeModalFull === "wheel" && <WheelFull />}
+            {activeModalFull === "badges" && <BadgesFull />}
+            {activeModalFull === "shop" && <ShopFull />}
+            {activeModalFull === "courses" && <CoursesFull />}
+            {activeModalFull === "chatbot" && <ChatbotFull />}
+            {activeModalFull === "editProfile" && <EditProfile />}
+          </ModalFull>
+        )}
       </div>
-
-      <div className="sticky top-0 z-30">
-        <StickyTop />
-      </div>
-
-      <div className="relative z-20">
-        <WidgetsGrid
-          onHabitsClick={() => openModalFull("habits")}
-          onTodosClick={() => openModalFull("todos")}
-          onCheckinClick={() => openModalFull("checkin")}
-          onAnalyticsClick={() => openModalFull("analytics")}
-          onWheelClick={() => openModalFull("wheel")}
-          onBadgesClick={() => openModalFull("badges")}
-          onAdsClick={() => openModalFull("ads")}
-          onShopClick={() => openModalFull("shop")}
-          onCoursesClick={() => openModalFull("courses")}
-        />
-      </div>
-
-      {activeModalFull && (
-        <ModalFull onClose={closeModalFull}>
-          {activeModalFull === "habits" && <HabitsFull />}
-          {activeModalFull === "todos" && <TodosFull />}
-          {activeModalFull === "checkin" && <CheckinFull />}
-          {activeModalFull === "analytics" && <AnalyticsFull />}
-          {activeModalFull === "wheel" && <WheelFull />}
-          {activeModalFull === "badges" && <BadgesFull />}
-          {activeModalFull === "shop" && <ShopFull />}
-          {activeModalFull === "courses" && <CoursesFull />}
-          {activeModalFull === "chatbot" && <ChatbotFull />}
-        </ModalFull>
-      )}
-    </div>
+    </AuthProvider>
   )
 }
 
