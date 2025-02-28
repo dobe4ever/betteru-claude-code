@@ -852,3 +852,65 @@ and 30 removals
   to implementing the habits and todo
   tracking features with proper database
   schema.
+
+
+  USER:
+
+When I go to the deployed app url (https://betteru-claude-code.vercel.app) it logs me in automatically probs the browser and my devices know my google login, i click logout, it works, then i click log in with google again and it sends me to this url: https://betteru-claude-code.vercel.app/auth/callback#access_token=eyJ... (long token) and the browser displays 404 this page could no be found. I paste the app url in the browser and it takes me to the app automatically logged in. I logout again and login to my existing account with email and passord. it works. I edit my profile name & pic, It works. I log out and log back in, the edited name persists but not the pic, the pic is back to my initial default by google account with no avatar.
+
+supabase dashboard - the info i managed to find related to the profiles table:
+
+2 Auth policies
+
+Role postgres
+
+Realtime off
+
+id int8
+
+username text
+
+avatar_url text
+
+created_at timestamptz
+
+schema
+
+public
+
+47996
+Docs
+profiles
+
+Disable RLS
+
+Create policy
+
+SELECT
+
+read_all_profiles
+
+Applied to:public role
+
+UPDATE
+
+update_own_profile
+
+Applied to:public role
+
+Storage policies
+Safeguard your files with policies that define the operations allowed for your users at the bucket level.
+
+profiles
+
+Public
+
+SELECT allow_avatar_uploads 1ige2ga_0
+
+INSERT allow_avatar_uploads 1ige2ga_1
+
+UPDATE allow_avatar_uploads 1ige2ga_2
+
+3 policies in profiles
+
+In the 'storage' section somewhere theres a folder 'avatars' with plenty of avatars that i tested between yesterday and today. it seems the pics are saved there when i edit the profile, it just wont persist to display it in the app when i logout and login again.
