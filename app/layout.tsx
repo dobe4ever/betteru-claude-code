@@ -24,6 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={nunito.className}>
+        <meta name="google-site-verification" content="Xe9XwiEn7YaawZn4GYkJe7dtNcq2S4CqPeGbMDxNA2o" />
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
