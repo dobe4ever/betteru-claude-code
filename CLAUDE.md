@@ -110,9 +110,9 @@
      NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
      ```
 
-2. **Local Development**:
+2. **Local Development (local on the codespaces server, never local my actual machine)**:
    - Run `npm run dev` to start development server
-   - Access the app at `http://localhost:3000`
+   - Access the app at `https://supreme-space-fiesta-rjwp5wx9j9ghjw4-3000.app.github.dev` or whatever codespace url
 
 3. **Deployment**:
    - The app deploys to Vercel
