@@ -16,9 +16,9 @@ import { CoursesFull } from "@/components/widegets-grid/courses/CoursesFull"
 import { WheelFull } from "@/components/widegets-grid/wheel/WheelFull"
 import { ChatbotButton } from "@/components/floating-btn/ChatbotButton"
 import { ChatbotFull } from "@/components/floating-btn/ChatbotFull"
-import { EditProfile } from "@/components/profile/EditProfile"
-import { AuthProvider } from "@/components/auth/AuthProvider"
+import { EditProfile } from "@/components/header/top-bar/EditProfile"
 
+import { AuthProvider } from "@/components/auth/AuthProvider"
 
 export default function Home() {
   const [fadePercentage, setFadePercentage] = useState(0)
@@ -48,18 +48,12 @@ export default function Home() {
   }, [activeModalFull])
   
   useEffect(() => {
-    const handleOpenEditProfile = () => {
-      setActiveModalFull("editProfile")
-    }
-    
     const handleCloseModal = () => {
       setActiveModalFull(null)
     }
     
-    window.addEventListener('open-edit-profile', handleOpenEditProfile)
     window.addEventListener('close-modal', handleCloseModal)
     return () => {
-      window.removeEventListener('open-edit-profile', handleOpenEditProfile)
       window.removeEventListener('close-modal', handleCloseModal)
     }
   }, [])
@@ -115,11 +109,12 @@ export default function Home() {
             {activeModalFull === "shop" && <ShopFull />}
             {activeModalFull === "courses" && <CoursesFull />}
             {activeModalFull === "chatbot" && <ChatbotFull />}
-            {activeModalFull === "editProfile" && <EditProfile />}
           </ModalFull>
         )}
+
+        {/* This is the independent EditProfile dialog that works on its own */}
+        <EditProfile />
       </div>
     </AuthProvider>
   )
 }
-

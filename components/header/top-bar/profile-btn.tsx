@@ -25,26 +25,30 @@ export function ProfileBtn() {
           <BigAvatar classnames="size-8 border rounded-full border-white" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-[280px] p-3">
+      <DropdownMenuContent align="end" className="w- p-3">
         <DropdownMenuItem className="text-md text-gray-500 p-2">{email}</DropdownMenuItem>
-        <DropdownMenuItem className="flex flex-row py-2">
+        <DropdownMenuItem className="flex flex-row">
           <div className="flex items-center">
-            <BigAvatar classnames="size-10 border-2 rounded-full border-white mr-3 flex-shrink-0" />
-            <div className="flex flex-col min-w-0 flex-1">
-              <p className="text-md font-medium truncate whitespace-nowrap">{username}</p>
+            <BigAvatar classnames="size-10 border-2 rounded-full border-white mr-3" />
+            <div className="flex flex-col">
+              <div className="text-title-card">{username}</div>
               <p className="text-gray-500 text-sm whitespace-nowrap">Free plan</p>
             </div>
           </div>
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem className="bg-orange-50 border border-orange-main/20 rounded-md my-1 hover:bg-orange-100 transition-colors">
-          <Crown className="mr-2 h-4 w-4 text-orange-main" /> <span className="text-gray-700 font-medium">Upgrade to Premium</span>
+        
+        <DropdownMenuItem className="bg-orange-50 border border-orange-main/20 rounded-xl my-1 hover:bg-orange-100 transition-colors p-2">
+          <Crown className="mr-2 h-4 w-4 text-orange-main"/> <div className="text-orange-main font-bold">Upgrade to Premium</div>
         </DropdownMenuItem>
+
+        <DropdownMenuSeparator className="my-2" />
+        
         <DropdownMenuItem onClick={() => window.dispatchEvent(new CustomEvent('open-edit-profile'))}>
-          <Edit className="mr-2 h-4 w-4 text-orange-main" /> <span className="text-gray-700">Edit Profile</span>
+          <Edit className="mr-2 h-4 w-4 text-orange-main" /> <span className="text-gray-500">Edit Profile</span>
         </DropdownMenuItem>
+
         <DropdownMenuItem onClick={signOut}>
-          <LogOut className="mr-2 h-4 w-4 text-orange-main" /> <span className="text-gray-700">Log out</span>
+          <LogOut className="mr-2 h-4 w-4 text-orange-main" /> <span className="text-gray-500">Log out</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
