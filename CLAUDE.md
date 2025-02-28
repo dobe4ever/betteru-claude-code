@@ -1,76 +1,195 @@
 # BetterU Developer Guide
 
 ## Commands
-- Development: `npm run dev` (starts dev server)
-- Build: `npm run build` (production build)
+- Development: `npm run dev` (starts Next.js development server)
+- Build: `npm run build` (creates production build)
 - Start: `npm run start` (runs production build)
 - Lint: `npm run lint` (checks code quality)
-- Type Check: `npx tsc --noEmit` (validates TypeScript)
+- Type Check: `npx tsc --noEmit` (validates TypeScript types)
 
 ## Code Style Guidelines
 - **Components**: Use PascalCase for component files and function names (e.g., `Button.tsx`)
-- **Organization**: Group related components in feature folders (auth/, header/, floating-btn/)
+- **Organization**: Group related components in feature folders (auth/, header/, floating-btn/, etc.)
 - **Imports**: Order as React → third-party libraries → local imports with @/ path aliases
-- **TypeScript**: Use strict typing with explicit interfaces for props, extend React types
-- **Naming**: Use descriptive names for components, hooks prefixed with `use`
-- **UI Components**: Prefer shadcn/ui components with Tailwind for styling
-- **Error Handling**: Use try/catch blocks for async operations with proper UI feedback
+- **TypeScript**: Use strict typing with interfaces for props, extend React types
+- **Naming**: Use descriptive names for components, prefix hooks with `use`
+- **UI Components**: Use shadcn/ui components with Tailwind CSS for styling
+- **Error Handling**: Implement try/catch blocks for async operations with proper UI feedback
 - **Files**: Mark client components with "use client" directive at top of file
-- **State Management**: Use React hooks (useState, useEffect) following React best practices
+- **State Management**: Use React hooks (useState, useEffect) for state management
 
-## Visual Description
-The application is a mobile-optimized self-improvement dashboard with habit tracking, todo management, and analytics widgets. UI uses orange gradient accents on white cards with rounded corners and Nunito font.
+## Architecture Overview
 
-Issues:
+### Tech Stack
+- **Framework**: Next.js 14
+- **UI Library**: React 18
+- **Styling**: Tailwind CSS
+- **Component Library**: shadcn/ui (based on Radix UI)
+- **Authentication**: Supabase Auth
+- **Database**: Supabase (PostgreSQL)
+- **Storage**: Supabase Storage
+- **Form Handling**: react-hook-form with zod validation
+- **Data Visualization**: Recharts
+- **Animation**: Framer Motion
 
-1. 'continue with google' button gives error: 
-403. That’s an error.
+### Project Structure
+- `/app`: Next.js App Router pages and layouts
+- `/components`: Reusable UI components
+  - `/auth`: Authentication components
+  - `/floating-btn`: Floating chatbot button components
+  - `/header`: Header and navigation components
+  - `/profile`: User profile management components
+  - `/ui`: shadcn/ui component library
+  - `/widegets-grid`: Dashboard widgets
+- `/hooks`: Custom React hooks
+- `/lib`: Utility functions
+- `/utils`: Helper functions and service connectors
+- `/public`: Static assets
 
-We're sorry, but you do not have access to this page. That’s all we know.
+## Current Issues
 
-2. login with email and password was already working for some time, creating and saving the user info in the 'users' table in supabase with some default configs. The logout button works, I can logout and login to my existing account.
+### Authentication Issues
+1. **Google Authentication**: Google OAuth integration is not working. 
+   - Issue: 403 error when attempting to use "Continue with Google" button
+   - OAuth client ID and secret have been created but require proper configuration in Supabase
+   - Current client ID: `333734726666-9asght6ntl57rbo3olfjvrv8b7iqlg5n.apps.googleusercontent.com`
+   - Missing auth callback route in the app
 
-3. Edit profile: I can edit the username & upload profile pic but when i click 'save' I get this error: ```invalid input syntax for type bigint: "76c49a10-8241-4dc8-be19-057af9482a7a"```
+2. **Email Authentication**: Working correctly
+   - Users can sign up and log in with email/password
+   - Email verification is implemented
 
-even tho it updates the info and it works and i can see the png's added in my suppabase account in the 'profiles' related stuff we created earlier.
+### Profile Management Issues
+1. **Profile Update Error**: Error when saving profile changes
+   - Issue: `invalid input syntax for type bigint: "76c49a10-8241-4dc8-be19-057af9482a7a"`
+   - Despite the error message, profile updates still work correctly
+   - Problem is likely with ID type mismatch in profiles table, which expects bigint rather than UUID
 
-4. We need a 'cancel' button in addition to the 'save changes' button, so that the edit profile pop up goes away and the user is back to wherever screen it needs to be seeing. Just implement whatever is the standard behaviour for everything always.
+2. **Fixed Issues**:
+   - Profile picture upload is working correctly
+   - Cancel button in Edit Profile modal is implemented and working
 
-First time ever using supabase, or any of these technologies really. My background is only in python so you need to take charge as the lead dev here based on my requests in english. Im logged in to supabase and I have other variables and secrets also handy, but you need to be very specific in your instructions if i need to check or do anything.
+## Feature Set
 
-___
+### User Management
+- Authentication (email/password, Google OAuth)
+- User profile management (username, avatar)
+- Profile editing with image upload
 
+### Habit Tracking
+- Daily habit tracking with completion toggles
+- Habit creation and configuration
+- Statistics on completion rates
+- Strike counter for habit consistency
+- Date-based navigation to view historical data
+- Challenge system for special/featured habits
 
-1. When clicking 'continue with google' button:
-"Google authentication is currently unavailable. Please use email and password to sign in."
+### Todo Management
+- Daily task management
+- Task completion tracking
+- Task prioritization
 
-2. can login with email ok
+### Analytics Features
+- Progress tracking over 7-day and 30-day periods
+- Visualization of habit/task completion
+- Charts and metrics for performance tracking
+- Life balance wheel tool
 
-3. I can update pic and username and see 'success' message upon saving and redirects me back to the home screen. The 'cancel' button also redirects back to home as expected.
+### Additional Features
+- Achievement badge system
+- AI-powered check-in system
+- Shop and courses section
 
-How can we make the google login work?
+## Development Workflow
+1. **Setup Environment**:
+   - Clone the repository
+   - Run `npm install` to install dependencies
+   - Create `.env.local` file with Supabase credentials:
+     ```
+     NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+     NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+     ```
 
-For additional info, this is a repo I just cloned from the original repo of this app just to edit with claude code (you). The original repo is deploying to vercel with one click but this one is not deployed anywhere yet, just pushing changes to the github repo but nothing else.
+2. **Local Development**:
+   - Run `npm run dev` to start development server
+   - Access the app at `http://localhost:3000`
 
-___
+3. **Deployment**:
+   - The app deploys to Vercel
+   - Set up proper environment variables in Vercel
+   - For Google OAuth, ensure proper redirect URI configuration
 
+## UI/UX Description
+- **Design System**: Mobile-optimized dashboard with cards and widgets
+- **Color Palette**: 
+  - Primary: Orange gradient (#f04c23 to #f99f1c)
+  - Background: White
+  - Card backgrounds: White with rounded corners
+  - Text: Dark gray for body, black for headings
+- **Typography**: 
+  - Font: Nunito (400, 700, 900 weights)
+  - Headings: Bold (700) or Black (900)
+  - Body text: Regular (400)
+- **Components**:
+  - Cards with consistent rounded corners (1.5rem border radius)
+  - Orange gradient accents
+  - Clean, minimal UI with ample whitespace
+  - Interactive elements have hover/active states
+- **Layout**:
+  - Header with user profile
+  - Sticky navigation bar
+  - Widget grid for different app features
+  - Modal-based full-screen interfaces for detailed views
 
-this url: `https://console.cloud.google.com/apis/credentials/consent` redirects me to `https://console.cloud.google.com/auth/overview?project=better-u-app-452215`
+## Database Schema
 
-No "External" user type → "CREATE" option, only a sidebar with: overview, branding, audience, clients, data access, verification center. 
+Based on the code, the database currently has the following structure:
 
+### Supabase Tables
 
+1. **profiles**
+   - `id`: bigint (primary key, should be UUID linked to auth.users)
+   - `username`: string
+   - `avatar_url`: string
+   - `created_at`: timestamp
 
-OAuth client created
-The client ID and secret can always be accessed from Credentials in APIs & Services
+### Supabase Storage
 
-OAuth access is restricted to the test users  listed on your OAuth consent screen
-Client ID
-333734726666-9asght6ntl57rbo3olfjvrv8b7iqlg5n.apps.googleusercontent.com
-Client secret
-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
-Creation date
-February 27, 2025 at 11:00:52 PM GMT+7
-Status
- Enabled
+1. **profiles** bucket
+   - `avatars/`: Directory for user avatar images
 
+### Planned/Needed Tables
+1. **habits**
+   - `id`: UUID (primary key)
+   - `user_id`: UUID (foreign key to users)
+   - `title`: string
+   - `description`: string (optional)
+   - `icon`: string
+   - `created_at`: timestamp
+   - `is_active`: boolean
+
+2. **habit_entries**
+   - `id`: UUID (primary key)
+   - `habit_id`: UUID (foreign key to habits)
+   - `user_id`: UUID (foreign key to users)
+   - `date`: date
+   - `completed`: boolean
+   - `notes`: string (optional)
+
+3. **todos**
+   - `id`: UUID (primary key)
+   - `user_id`: UUID (foreign key to users)
+   - `title`: string
+   - `description`: string (optional)
+   - `due_date`: date (optional)
+   - `created_at`: timestamp
+   - `completed`: boolean
+   - `completed_at`: timestamp (optional)
+   - `priority`: integer
+
+4. **user_settings**
+   - `user_id`: UUID (primary key, foreign key to users)
+   - `theme`: string
+   - `notification_preferences`: JSON
+
+Note: This schema reflects the expected structure based on the current code implementation, and additional tables will be needed as features are implemented.
