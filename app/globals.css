@@ -59,25 +59,15 @@
   }
 
   html, #__next {
-    font-family: "Nunito", sans-serif;
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-    -webkit-tap-highlight-color: transparent;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    user-select: none;
+  font-family: "Nunito", sans-serif;
+  height: 100%;
+  font-weight: 100%; 
+  padding: 2px;
   }
 
   body {
-    @apply min-h-full w-full;
-    margin: 0;
-    padding: 0;
-    text-rendering: optimizeSpeed;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    @apply min-h-full;
+    margin: 0 auto;
   }
 }
 
@@ -118,88 +108,58 @@ display: none;
   }
 }
   
-/* Mobile-first responsive design system */
-
-/* Base elements */
+/* Default styles for mobile-first approach */
 .button {
-  @apply h-9 px-2.5 md:h-10 md:px-4;
+  height: 36px;
+  padding: 0 10px;
 }
 
 .icon {
-  @apply text-xs md:text-sm;
+  font-size: 12px;
 }
 
 .text {
-  @apply text-xs font-normal md:text-sm;
+  font-size: 12px;
+  font-weight: 400;
 }
 
-/* Typography system */
 .text-title-orange {
-  @apply text-lg md:text-xl lg:text-2xl font-black leading-normal text-center;
+  font-size: 20px;
+  line-height: 1.5;
+  font-weight: 900;
   -webkit-background-clip: text;
   background-clip: text;
   background-image: linear-gradient(45deg, #f04c23, #f99f1c);
+  text-align: center;
   color: transparent;
 }
 
 .text-title-white {
-  @apply text-lg md:text-xl lg:text-2xl font-bold leading-tight text-left text-white;
+  font-size: 20px;
+  line-height: 1;
+  font-weight: 700;
+  text-align: left;
+  color: white;
 }
 
 .text-title-card {
-  @apply text-sm md:text-base leading-relaxed text-left;
+  font-size: 14px;
+  line-height: 2;
+  text-align: left;
 }
 
 .text-description-card {
-  @apply text-xs md:text-sm leading-normal text-left text-[#babbbc];
+  text-align: left;
+  color: #babbbc;
+  font-size: 12px;
+  line-height: 1.5;
 }
 
 .text-big-percent-number {
-  @apply text-2xl md:text-3xl lg:text-4xl font-bold leading-none text-center text-black;
-}
-
-/* Responsive spacing utility classes */
-.responsive-p {
-  @apply p-2 sm:p-3 md:p-4 lg:p-5;
-}
-
-.responsive-m {
-  @apply m-2 sm:m-3 md:m-4 lg:m-5;
-}
-
-.responsive-gap {
-  @apply gap-2 sm:gap-3 md:gap-4;
-}
-
-/* Touch-friendly interactive elements - minimum sizes for touch targets */
-.touch-target {
-  @apply min-h-[44px] min-w-[44px];
-}
-
-/* Container constraints for different screen sizes */
-.container-mobile {
-  @apply max-w-[100%] px-3;
-}
-
-.container-tablet {
-  @apply max-w-[768px] px-4;
-}
-
-.container-desktop {
-  @apply max-w-[1024px] px-6;
-}
-
-.container-large {
-  @apply max-w-[1280px] px-8;
-}
-
-/* Safe areas for notched devices */
-@supports(padding: max(0px)) {
-  .safe-area-inset {
-    padding-left: max(1rem, env(safe-area-inset-left));
-    padding-right: max(1rem, env(safe-area-inset-right));
-    padding-top: max(1rem, env(safe-area-inset-top));
-    padding-bottom: max(1rem, env(safe-area-inset-bottom));
-  }
+  font-size: 28px;
+  line-height: 1;
+  font-weight: 700;
+  text-align: center;
+  color: black;
 }
 
