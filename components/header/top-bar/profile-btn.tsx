@@ -25,26 +25,37 @@ export function ProfileBtn() {
           <BigAvatar classnames="size-8 border rounded-full border-white" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-62 p-3">
-        <DropdownMenuItem className="text-md text-gray-500 p-2">{email}</DropdownMenuItem>
-        <DropdownMenuItem className="flex flex-row">
+      <DropdownMenuContent align="end" className="w- p-3">
+        <div className="text-md text-gray-500 p-2">{email}</div>
+        
+        <div className="flex flex-row p-2">
           <div className="flex items-center">
             <BigAvatar classnames="size-10 border-2 rounded-full border-white mr-3" />
             <div className="flex flex-col">
-              <p className="text-md font-medium">{username}</p>
+              <div className="text-title-card">{username}</div>
               <p className="text-gray-500 text-sm whitespace-nowrap">Free plan</p>
             </div>
           </div>
+        </div>
+        
+        <DropdownMenuItem className="bg-orange-50 border border-orange-main/20 rounded-xl my-1 hover:bg-orange-100 transition-colors p-3">
+          <Crown className="mr-3 text-orange-main"/> 
+          <div className="flex flex-col">
+            <div className="text-gray-500 font-bold">Upgrade to Premium</div>
+            <div className="text-orange-main/60 text-xs">Coming soon</div>
+          </div>
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <Crown className="mr-2 h-4 w-4" /> Upgrade to Premium
-        </DropdownMenuItem>
+
+        <DropdownMenuSeparator className="my-2" />
+        
         <DropdownMenuItem onClick={() => window.dispatchEvent(new CustomEvent('open-edit-profile'))}>
-          <Edit className="mr-2 h-4 w-4" /> Edit Profile
+          <Edit className="mr-2 h-4 w-4 text-orange-main" /> 
+          <span className="text-gray-500">Edit Profile</span>
         </DropdownMenuItem>
+
         <DropdownMenuItem onClick={signOut}>
-          <LogOut className="mr-2 h-4 w-4" /> Log out
+          <LogOut className="mr-2 h-4 w-4 text-orange-main" /> 
+          <span className="text-gray-500">Log out</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
