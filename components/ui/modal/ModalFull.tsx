@@ -1,23 +1,9 @@
 // components/ui/modal/ModalFull.tsx
+"use client"
 
-import { useEffect, useRef, type ReactNode } from "react"
-import { AnimatePresence, motion } from "framer-motion"
-import { Button } from "@/components/ui/button"
+import { ReactNode } from "react"
+import * as SheetPrimitive from "@radix-ui/react-dialog"
 import { X } from "lucide-react"
-
-interface CrossBtnProps {
-  onClick: () => void
-}
-
-export function CrossBtn({ onClick }: CrossBtnProps) {
-  return (
-    <div className="[&_svg]:size-5">
-      <Button variant="ghost" size="icon" className="text-white" onClick={onClick}>
-        <X strokeWidth={3} />
-      </Button>
-    </div>
-  )
-}
 
 interface ModalFullProps {
   isOpen: boolean
@@ -27,74 +13,62 @@ interface ModalFullProps {
 }
 
 export const ModalFull = ({ isOpen, onClose, children, title }: ModalFullProps) => {
-  const contentRef = useRef<HTMLDivElement>(null)
-
-  // Handle escape key press
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isOpen) {
-        onClose()
-      }
-    }
-
-    document.addEventListener("keydown", handleEscape)
-    return () => document.removeEventListener("keydown", handleEscape)
-  }, [isOpen, onClose])
-
-  // Prevent body scroll when modal is open
-  useEffect(() => {
-    if (isOpen) {
-      document.body.classList.add("overflow-hidden")
-    } else {
-      document.body.classList.remove("overflow-hidden")
-    }
-    return () => {
-      document.body.classList.remove("overflow-hidden")
-    }
-  }, [isOpen])
-
-  // Close when clicking outside content (optional)
-  const handleBackdropClick = (e: React.MouseEvent) => {
-    if (contentRef.current && !contentRef.current.contains(e.target as Node)) {
-      onClose()
-    }
-  }
-
+  // Custom implementation to avoid double X button and background issues
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div
-          className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
+    <SheetPrimitive.Root open={isOpen} onOpenChange={onClose}>
+      <SheetPrimitive.Portal>
+        {/* Transparent overlay that fades in/out */}
+        <SheetPrimitive.Overlay className="fixed inset-0 z-50 bg-black/20 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
+        
+        {/* Modal content that slides from bottom - with slower animation */}
+        <SheetPrimitive.Content 
+          className="fixed inset-x-0 bottom-0 z-50 h-[100dvh] overflow-auto bg-gradient-orange 
+            data-[state=open]:animate-in data-[state=closed]:animate-out 
+            data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom
+            data-[state=closed]:duration-300 data-[state=open]:duration-400
+            border-0 p-0 shadow-lg"
         >
-          <div className="fixed inset-0 bg-gradient-orange" onClick={handleBackdropClick}>
-            <div className="fixed right-3 top-3 z-10">
-              <CrossBtn onClick={onClose} />
-            </div>
-            
+          {/* Fixed header */}
+          <div className="fixed top-0 left-0 right-0 flex items-center justify-between px-3 py-2 z-10">
             {title && (
-              <div className="fixed left-4 top-3 z-10">
-                <h2 className="text-title-white text-xl font-semibold">{title}</h2>
-              </div>
+              <h2 className="text-title-white text-lg font-semibold m-0 p-0">
+                {title}
+              </h2>
             )}
-
-            <motion.div 
-              className="fixed top-0 right-0 left-0 bottom-0 pt-12 overflow-auto"
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: 20, opacity: 0 }}
-              transition={{ duration: 0.3, delay: 0.1 }}
-              ref={contentRef}
+            
+            {/* Custom close button without the default one */}
+            <button 
+              className="text-white outline-none focus:outline-none hover:opacity-80 p-0"
+              onClick={() => onClose()}
             >
-              {children}
-            </motion.div>
+              <X className="h-5 w-5" strokeWidth={3} />
+              <span className="sr-only">Close</span>
+            </button>
           </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+          
+          {/* Content with padding to account for the fixed header */}
+          <div className="pt-10 h-full">
+            {children}
+          </div>
+        </SheetPrimitive.Content>
+      </SheetPrimitive.Portal>
+    </SheetPrimitive.Root>
+  )
+}
+
+// Export CrossBtn for backward compatibility if needed
+interface CrossBtnProps {
+  onClick: () => void
+}
+
+export function CrossBtn({ onClick }: CrossBtnProps) {
+  return (
+    <button 
+      className="text-white outline-none hover:opacity-80 p-0"
+      onClick={onClick}
+    >
+      <X className="h-5 w-5" strokeWidth={3} />
+    </button>
   )
 }
 

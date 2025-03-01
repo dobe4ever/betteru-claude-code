@@ -11,7 +11,7 @@ export const HabitsModal: React.FC = () => {
   return (
     <div className="flex flex-col h-full">
       {/* Challenge Card */}
-      <div className="flex-none p-3">
+      <div className="flex-none px-2">
         <ChallengeCard />
       </div>
       

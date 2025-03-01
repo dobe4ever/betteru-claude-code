@@ -93,7 +93,7 @@ export function HabitSettingsDialog({ habit }: HabitSettingsDialogProps) {
   }
   
   // Helper function to safely control dialog state
-  const safelyOpenDialog = (e) => {
+  const safelyOpenDialog = (e: { stopPropagation: () => void }) => {
     e.stopPropagation(); // Stop event from bubbling to parent containers
     setIsDialogOpen(true);
   };

@@ -6,9 +6,9 @@ import { useState } from "react"
 import { Eye, EyeOff } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { HabitCard } from "./HabitCard"
-import { AddMenu } from "./AddMenu"
 import { DateNavigation } from "./DateNavigation"
 import { useHabits } from "./HabitsContext"
+import { CircleButton } from "@/components/ui/custom-components/custom-buttons"
 
 export function HabitsList() {
   const { habits, addHabit } = useHabits()
@@ -35,7 +35,12 @@ export function HabitsList() {
     : habits.filter(habit => !habit.completed) // Show only incomplete habits
 
   return (
-    <div className="flex flex-col h-full bg-white border rounded-3xl">
+    // Habits list container
+    <div className="flex flex-col h-full bg-white border rounded-2xl">
+      <CircleButton
+        variant="plus" >
+      </CircleButton>
+
       {/* Header */}
       <div className="flex-none p-3 space-y-2 rounded-t-3xl">
         <DateNavigation 
@@ -45,7 +50,7 @@ export function HabitsList() {
       </div>
 
       {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto min-h-0">
+      <div className="mb-4 flex-1 overflow-y-auto min-h-0">
         <div className="p-2">
           {filteredHabits.map((habit) => (
             <HabitCard 
@@ -70,12 +75,13 @@ export function HabitsList() {
       </div>
 
       {/* Footer */}
-      <div className="flex flex-row justify-between items-center bg-white">
-        <div>
-          <AddMenu onSelect={handleMenuSelect} />
-        </div>
-        <div>
-          <Button 
+      <div className="flex flex-row justify-between items-center bg-from the habitlist see the footer">
+
+      <div>
+        {/* <AddMenu /> */}
+      </div>
+      <div>
+        <Button 
             variant="ghost" 
             size="sm" 
             onClick={() => setShowCompleted(!showCompleted)} 
@@ -88,8 +94,9 @@ export function HabitsList() {
               <EyeOff className="h-5 w-5 text-gray-600" />
             )}
           </Button>
-        </div>
       </div>
+    </div>
+
     </div>
   )
 }

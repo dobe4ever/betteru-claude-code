@@ -8,17 +8,16 @@ import { WidgetsGrid } from "@/components/widegets-grid/WidgetsGrid"
 import { ModalFull } from "@/components/ui/modal/ModalFull"
 import { HabitsModal } from "@/components/widegets-grid/habits/HabitsModal"
 import { HabitsProvider } from "@/components/widegets-grid/habits/HabitsContext"
-import { TodosFull } from "@/components/widegets-grid/todos/TodosFull"
-import { CheckinFull } from "@/components/widegets-grid/checkin/CheckinFull"
-import { AnalyticsFull } from "@/components/widegets-grid/analytics/AnalyticsFull"
-import { BadgesFull } from "@/components/widegets-grid/badges/BadgesFull"
-import { ShopFull } from "@/components/widegets-grid/shop/ShopFull"
-import { CoursesFull } from "@/components/widegets-grid/courses/CoursesFull"
-import { WheelFull } from "@/components/widegets-grid/wheel/WheelFull"
-import { ChatbotButton } from "@/components/floating-btn/ChatbotButton"
-import { ChatbotFull } from "@/components/floating-btn/ChatbotFull"
-
+import { TodosModal } from "@/components/widegets-grid/todos/TodosModal"
+import { CheckinModal } from "@/components/widegets-grid/checkin/CheckinModal"
+import { AnalyticsModal } from "@/components/widegets-grid/analytics/AnalyticsModal"
+import { BadgesModal } from "@/components/widegets-grid/badges/BadgesModal"
+import { ShopModal } from "@/components/widegets-grid/shop/ShopModal"
+import { CoursesModal } from "@/components/widegets-grid/courses/CoursesModal"
+import { WheelModal } from "@/components/widegets-grid/wheel/WheelModal"
+import { CircleButton } from "@/components/ui/custom-components/custom-buttons"
 import { AuthProvider } from "@/components/auth/AuthProvider"
+import { ChatbotDrawer } from "@/components/floating-btn/ChatbotDrawer"
 
 const modalTitles: Record<string, string> = {
   habits: "Habits",
@@ -35,6 +34,7 @@ const modalTitles: Record<string, string> = {
 export default function Home() {
   const [fadePercentage, setFadePercentage] = useState(0)
   const [activeModal, setActiveModal] = useState<string | null>(null)
+  const [isChatOpen, setIsChatOpen] = useState(false)
   const headerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -75,21 +75,19 @@ export default function Home() {
       case "habits":
         return <HabitsModal />
       case "todos":
-        return <TodosFull />
+        return <TodosModal />
       case "checkin":
-        return <CheckinFull />
+        return <CheckinModal />
       case "analytics":
-        return <AnalyticsFull />
+        return <AnalyticsModal />
       case "wheel":
-        return <WheelFull />
+        return <WheelModal />
       case "badges":
-        return <BadgesFull />
+        return <BadgesModal />
       case "shop":
-        return <ShopFull />
+        return <ShopModal />
       case "courses":
-        return <CoursesFull />
-      case "chatbot":
-        return <ChatbotFull />
+        return <CoursesModal />
       default:
         return null
     }
@@ -98,10 +96,29 @@ export default function Home() {
   return (
     <AuthProvider>
       <HabitsProvider>
+        {/* Chatbot button with higher z-index and ChatbotDrawer */}
+        <div
+          className="fixed bottom-4 right-4 cursor-pointer"
+          style={{ 
+            zIndex: 10000,
+            position: 'fixed',
+            pointerEvents: 'auto'
+          }}
+          onClick={() => setIsChatOpen(true)}
+        >
+          <CircleButton 
+            variant="bot"
+            className="shadow-lg"
+          />
+        </div>
+        
+        {/* Separate ChatbotDrawer component */}
+        <ChatbotDrawer 
+          isOpen={isChatOpen} 
+          onOpenChange={setIsChatOpen} 
+        />
+
         <div className="relative max-h-screen w-full bg-gradient-orange">
-
-          <ChatbotButton onClick={() => openModal("chatbot")} />
-
           <div ref={headerRef} className="relative z-10">
             <Header />
             <div
@@ -137,7 +154,7 @@ export default function Home() {
           </ModalFull>
 
         </div>
-      </HabitsProvider>decided we
+      </HabitsProvider>
     </AuthProvider>
   )
 }

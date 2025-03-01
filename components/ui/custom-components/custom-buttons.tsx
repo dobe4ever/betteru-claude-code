@@ -4,7 +4,7 @@ import { Check, X, Bot } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface CircleButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant: 'confirm' | 'cancel' | 'bot' | 'fire'
+  variant: 'confirm' | 'cancel' | 'bot' | 'fire' | 'plus'
 }
 
 const CircleButton = ({ variant, className, ...props }: CircleButtonProps) => {
@@ -24,6 +24,10 @@ const CircleButton = ({ variant, className, ...props }: CircleButtonProps) => {
     fire: {
       style: "border text-orange-500",
       content: <span className="text-2xl">🔥</span>
+    },
+    plus: {
+      style: "border text-orange-500",
+      content: <span className="text-2xl">➕</span>
     }
   }
 
