@@ -1,11 +1,11 @@
-// components/widegets-grid/habits/HabitsFull.tsx
+// components/widgets-grid/habits/habits-full.tsx
 
 "use client"
 
 import type React from "react"
-import { ChallengeCard } from "./ChallengeCard"
-import { HabitsList } from "./HabitsList"
-import { HabitsProvider } from "./HabitsContext"
+import { ChallengeCard } from "./challenge-card"
+import { HabitsList } from "./habits-list"
+import { HabitsProvider } from "./habits-context"
 
 export const HabitsFull: React.FC = () => {
   return (

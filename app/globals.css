@@ -81,6 +81,32 @@ scrollbar-width: none;
 *::-webkit-scrollbar {
 display: none;
 }
+
+@layer components {
+  .dialog-wrapper {
+    @apply bg-white rounded-3xl border shadow-lg p-4 w-[90%] max-w-sm [&>button]:hidden;
+  }
+  
+  .dialog-header {
+    @apply flex flex-row items-center justify-between px-0 space-y-0;
+  }
+  
+  .dialog-close-btn {
+    @apply border-0 hover:bg-orange-100 rounded-full h-8 w-8 p-1 flex items-center justify-center;
+  }
+  
+  .dialog-title {
+    @apply text-title-orange;
+  }
+  
+  .dialog-footer {
+    @apply sm:justify-center mt-4;
+  }
+  
+  .dialog-submit-btn {
+    @apply w-full bg-orange-500 hover:bg-orange-600 text-white;
+  }
+}
   
 /* Default styles for mobile-first approach */
 .button {

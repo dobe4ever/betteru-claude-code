@@ -3,6 +3,7 @@
 
 import { PromoCard } from "./promo-card/PromoCard"
 import { HabitsWidget } from "./habits/HabitsWidget"
+import { HabitsProvider } from "./habits/HabitsContext"
 import { TodosWidget } from "./todos/TodosWdiget"
 import { CheckinWidget } from "./checkin/CheckinWidget"
 import { AnalyticsWidget } from "./analytics/AnalyticsWdiget"

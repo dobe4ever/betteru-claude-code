@@ -1,9 +1,9 @@
-// components/widegets-grid/analytics/AnalyticsWidget.tsx
+// components/widgets-grid/analytics/analytics-widget.tsx
 
-import { Widget } from "@/components/widegets-grid/widget"
+import { Widget } from "@/components/widgets-grid/widget"
 import { Activity } from "lucide-react"
 
-// AnalyticsWidget component
+// Analytics widget component 
 export function AnalyticsWidget({ onAnalyticsClick }: { onAnalyticsClick: () => void }) {
   return (
     <Widget title="Analytics" onClick={onAnalyticsClick} className="flex flex-col gap-4 aspect-[1/1]">

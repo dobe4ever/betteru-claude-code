@@ -2,39 +2,24 @@
 
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Eye, EyeOff } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { HabitCard } from "./HabitCard"
 import { AddMenu } from "./AddMenu"
 import { DateNavigation } from "./DateNavigation"
+import { useHabits } from "./HabitsContext"
 
-interface HabitCard {
-  id: string
-  title: string
-  completed: boolean
-}
-
-interface HabitsListProps {
-  cards: HabitCard[]
-  onAddCard: (title: string) => void
-}
-
-export function HabitsList({ cards: initialCards, onAddCard }: HabitsListProps) {
+export function HabitsList() {
+  const { habits, addHabit } = useHabits()
   const [selectedDate, setSelectedDate] = useState(new Date())
   const [showCompleted, setShowCompleted] = useState(true)
   const [isAdding, setIsAdding] = useState(false)
   const [newCardTitle, setNewCardTitle] = useState("")
-  const [cards, setCards] = useState(initialCards)
   
-  // Update local cards state when prop changes
-  useEffect(() => {
-    setCards(initialCards);
-  }, [initialCards]);
-
   const handleAddCard = () => {
     if (newCardTitle.trim()) {
-      onAddCard(newCardTitle)
+      addHabit(newCardTitle)
       setNewCardTitle("")
       setIsAdding(false)
     }
@@ -44,18 +29,10 @@ export function HabitsList({ cards: initialCards, onAddCard }: HabitsListProps) 
     setIsAdding(true)
   }
   
-  const handleCompletedChange = (id: string, completed: boolean) => {
-    setCards(prevCards => 
-      prevCards.map(card => 
-        card.id === id ? { ...card, completed } : card
-      )
-    )
-  }
-  
-  // Filter cards based on the showCompleted state
-  const filteredCards = showCompleted 
-    ? cards // Show all cards
-    : cards.filter(card => !card.completed) // Show only incomplete cards
+  // Filter habits based on the showCompleted state
+  const filteredHabits = showCompleted 
+    ? habits // Show all habits
+    : habits.filter(habit => !habit.completed) // Show only incomplete habits
 
   return (
     <div className="flex flex-col h-full bg-white border rounded-3xl">
@@ -70,12 +47,10 @@ export function HabitsList({ cards: initialCards, onAddCard }: HabitsListProps) 
       {/* Scrollable content */}
       <div className="flex-1 overflow-y-auto min-h-0">
         <div className="p-2">
-          {filteredCards.map((card) => (
+          {filteredHabits.map((habit) => (
             <HabitCard 
-              key={card.id} 
-              title={card.title} 
-              completed={card.completed}
-              onCompletedChange={(completed) => handleCompletedChange(card.id, completed)}
+              key={habit.id}
+              habit={habit}
             />
           ))}
           {isAdding && (
@@ -85,7 +60,7 @@ export function HabitsList({ cards: initialCards, onAddCard }: HabitsListProps) 
                 value={newCardTitle}
                 onChange={(e) => setNewCardTitle(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleAddCard()}
-                placeholder="Enter card title..."
+                placeholder="Enter habit title..."
                 className="w-full p-2 rounded focus:ring-blue-500"
                 autoFocus
               />
@@ -96,12 +71,11 @@ export function HabitsList({ cards: initialCards, onAddCard }: HabitsListProps) 
 
       {/* Footer */}
       <div className="flex flex-row justify-between items-center bg-white">
-
-      <div>
-        <AddMenu />
-      </div>
-      <div>
-        <Button 
+        <div>
+          <AddMenu onSelect={handleMenuSelect} />
+        </div>
+        <div>
+          <Button 
             variant="ghost" 
             size="sm" 
             onClick={() => setShowCompleted(!showCompleted)} 
@@ -114,8 +88,8 @@ export function HabitsList({ cards: initialCards, onAddCard }: HabitsListProps) 
               <EyeOff className="h-5 w-5 text-gray-600" />
             )}
           </Button>
+        </div>
       </div>
-    </div>
     </div>
   )
 }

@@ -1,4 +1,4 @@
-// components/widegets-grid/habits/HabitsFull.tsx
+// components/widegets-grid/habits/HabitsModal.tsx
 
 "use client"
 
@@ -7,7 +7,7 @@ import { ChallengeCard } from "./ChallengeCard"
 import { HabitsList } from "./HabitsList"
 import { HabitsProvider } from "./HabitsContext"
 
-export const HabitsFull: React.FC = () => {
+export const HabitsModal: React.FC = () => {
   return (
     <HabitsProvider>
       <div className="flex flex-col h-full">

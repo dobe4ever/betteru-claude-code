@@ -1,6 +1,6 @@
 "use client"
 
-// components/header/top-bar/notification-btn.tsx
+// components/header/top-bar/NotificationsDropdown.tsx
 import { useState } from "react"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
@@ -14,11 +14,11 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Bell } from "lucide-react"
 
-interface NotificationBtnProps {
+interface NotificationsDropdownProps {
   color?: "white" | "orange"
 }
 
-export function NotificationBtn({ color = "white" }: NotificationBtnProps) {
+export function NotificationsDropdown({ color = "white" }: NotificationsDropdownProps) {
   const [notificationCount, setNotificationCount] = useState(3)
 
   const iconColor = color === "white" ? "text-orange-main" : "text-white"

@@ -1,4 +1,4 @@
-// components/header/top-bar/profile-btn.tsx
+// components/header/top-bar/ProfileDropdown.tsx
 "use client"
 
 import { Button } from "@/components/ui/button"
@@ -9,11 +9,12 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu"
-import { LogOut, Edit, Crown } from "lucide-react"
+import { LogOut, Crown } from "lucide-react"
+import { EditProfileDialog } from "./EditProfileDialog"
 import { BigAvatar } from "../user-card/BigAvatar"
 import { useAuth } from "@/components/auth/AuthProvider"
 
-export function ProfileBtn() {
+export function ProfileDropdown() {
   const { user, signOut } = useAuth()
   const username = user?.user_metadata?.username || "User"
   const email = user?.email || "email@example.com"
@@ -48,9 +49,8 @@ export function ProfileBtn() {
 
         <DropdownMenuSeparator className="my-2" />
         
-        <DropdownMenuItem onClick={() => window.dispatchEvent(new CustomEvent('open-edit-profile'))}>
-          <Edit className="mr-2 h-4 w-4 text-orange-main" /> 
-          <span className="text-gray-500">Edit Profile</span>
+        <DropdownMenuItem asChild>
+          <EditProfileDialog />
         </DropdownMenuItem>
 
         <DropdownMenuItem onClick={signOut}>

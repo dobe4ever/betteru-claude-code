@@ -1,50 +1,77 @@
-import { useState } from 'react'
+// components/ui/strike-counter.jsx
+"use client"
+
+import { useState, useEffect } from 'react'
 import { Flame } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
-export function StrikeCounter() {
-  const [strikes, setStrikes] = useState(0)
+export function StrikeCounter({ count = 0, className, onClick }) {
   const [isAnimating, setIsAnimating] = useState(false)
+  const [displayCount, setDisplayCount] = useState(count)
 
-  const handleIncrement = () => {
-    setStrikes(prev => prev + 1)
-    setIsAnimating(true)
-    setTimeout(() => setIsAnimating(false), 500)
+  // Update display count when prop count changes
+  useEffect(() => {
+    // If increasing, trigger animation
+    if (count > displayCount) {
+      setIsAnimating(true)
+      setTimeout(() => setIsAnimating(false), 1000)
+    }
+    setDisplayCount(count)
+  }, [count, displayCount])
+
+  const handleClick = () => {
+    if (onClick) {
+      onClick()
+      setIsAnimating(true)
+      setTimeout(() => setIsAnimating(false), 1000)
+    }
+  }
+
+  // Determine color based on streak count
+  const getColor = () => {
+    if (count >= 30) return "text-red-500"
+    if (count >= 15) return "text-orange-500"
+    if (count >= 7) return "text-amber-500" 
+    return "text-gray-400"
   }
 
   return (
     <div 
-      className="relative aspect-square w-20 cursor-pointer"
-      onClick={handleIncrement}
+      className={cn(
+        "relative flex items-center justify-center",
+        onClick && "cursor-pointer",
+        className
+      )}
+      onClick={handleClick}
     >
-      <div className="absolute inset-0">
-        <div 
-          className="h-full w-full flex items-center justify-center"
-        >
-          <div className="flex flex-col items-center gap-1">
-            <span className="text-2xl font-bold text-title-orange">🔥{strikes}</span>
-          </div>
-          
-          {isAnimating && (
-            <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
-              <div className="flex gap-1">
-                {[...Array(3)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="animate-ping opacity-75 text-sm"
-                    style={{
-                      animationDelay: `${i * 100}ms`,
-                      animationDuration: '1s'
-                    }}
-                  >
-                    🔥
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
+      <div className="flex items-center">
+        <span className={cn("text-lg font-bold", getColor())}>
+          {displayCount}
+        </span>
+        <Flame className={cn("h-5 w-5 ml-0.5", getColor())} />
       </div>
+      
+      {isAnimating && (
+        <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 pointer-events-none">
+          <div className="flex gap-1">
+            {[...Array(3)].map((_, i) => (
+              <div
+                key={i}
+                className={cn(
+                  "animate-ping opacity-75 text-sm",
+                  getColor()
+                )}
+                style={{
+                  animationDelay: `${i * 100}ms`,
+                  animationDuration: '1s'
+                }}
+              >
+                🔥
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
-

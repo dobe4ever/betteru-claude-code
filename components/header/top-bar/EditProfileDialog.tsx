@@ -1,4 +1,4 @@
-// components/header/top-bar/EditProfile.tsx
+// components/header/top-bar/EditProfileDialog.tsx
 
 "use client"
 
@@ -8,25 +8,29 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useAuth } from "@/components/auth/AuthProvider"
 import { supabase } from "@/utils/supabase"
-import { Camera, Loader2, Trash2 } from "lucide-react"
+import { Camera, Loader2, Trash2, Edit, X } from "lucide-react"
 import {
-  AlertDialog,
-  AlertDialogContent,
-} from "@/components/ui/alert-dialog"
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
+} from "@/components/ui/dialog" 
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar"
 
-export function EditProfile() {
+export function EditProfileDialog() {
   const { user } = useAuth()
   const [username, setUsername] = useState("")
   const [avatarUrl, setAvatarUrl] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [message, setMessage] = useState({ text: "", type: "" })
-  const [open, setOpen] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
   
   useEffect(() => {
@@ -35,16 +39,6 @@ export function EditProfile() {
       setAvatarUrl(user.user_metadata?.avatar_url || "")
     }
   }, [user])
-  
-  useEffect(() => {
-    const handleOpen = () => {
-      setOpen(true)
-      setMessage({ text: "", type: "" })
-    }
-    
-    window.addEventListener('open-edit-profile', handleOpen)
-    return () => window.removeEventListener('open-edit-profile', handleOpen)
-  }, [])
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -62,7 +56,6 @@ export function EditProfile() {
       if (authError) throw authError
       
       setMessage({ text: "Profile updated successfully!", type: "success" })
-      setTimeout(() => setOpen(false), 1500)
       
     } catch (err: any) {
       setMessage({ text: err.message || "An unexpected error occurred", type: "error" })
@@ -96,7 +89,7 @@ export function EditProfile() {
         setAvatarUrl(data.publicUrl)
         setMessage({ text: "Image uploaded successfully!", type: "success" })
         setTimeout(() => {
-          if (open) setMessage({ text: "", type: "" })
+          setMessage({ text: "", type: "" })
         }, 3000)
       }
     } catch (error: any) {
@@ -122,7 +115,7 @@ export function EditProfile() {
       setAvatarUrl("")
       setMessage({ text: "Profile picture removed!", type: "success" })
       setTimeout(() => {
-        if (open) setMessage({ text: "", type: "" })
+        setMessage({ text: "", type: "" })
       }, 3000)
     } catch (error: any) {
       setMessage({ text: error.message || "Error removing image", type: "error" })
@@ -145,9 +138,20 @@ export function EditProfile() {
   }
   
   return (
-    <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogContent className="bg-white rounded-3xl border shadow-lg mx-auto p-4 overflow-y-auto w-[90%] max-w-sm">
-        <h2 className="text-2xl font-bold mb-6 text-title-orange">Edit Profile</h2>
+    <Dialog>
+      <DialogTrigger asChild>
+        <div className="flex items-center cursor-pointer">
+          <Edit className="mr-2 h-4 w-4 text-orange-main" /> 
+          <span className="text-gray-500">Edit Profile</span>
+        </div>
+      </DialogTrigger>
+      <DialogContent className="dialog-wrapper">
+        <DialogHeader className="dialog-header">
+          <DialogTitle className="dialog-title">Edit Profile</DialogTitle>
+          <DialogClose className="dialog-close-btn">
+            <X className="w-5 h-5" />
+          </DialogClose>
+        </DialogHeader>
         
         {message.text && (
           <div className={`p-3 mb-4 rounded ${message.type === "error" ? "bg-red-100 text-red-700" : "bg-green-100 text-green-700"}`}>
@@ -207,35 +211,38 @@ export function EditProfile() {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
-              className="w-full"
+              className="w-full rounded-3xl"
             />
           </div>
           
-          <div className="pt-4 flex gap-4">
-            <Button 
-              type="button" 
-              variant="outline"
-              className="w-full" 
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button 
-              type="submit" 
-              className="w-full bg-orange-500 hover:bg-orange-600" 
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <span className="flex items-center">
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving...
-                </span>
-              ) : (
-                "Save Changes"
-              )}
-            </Button>
-          </div>
+          <DialogFooter className="dialog-footer">
+            <div className="flex w-full gap-4">
+              <DialogClose asChild>
+                <Button 
+                  type="button" 
+                  variant="outline"
+                  className="w-full rounded-3xl" 
+                >
+                  Cancel
+                </Button>
+              </DialogClose>
+              <Button 
+                type="submit" 
+                className="dialog-submit-btn rounded-3xl" 
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <span className="flex items-center">
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving...
+                  </span>
+                ) : (
+                  "Save Changes"
+                )}
+              </Button>
+            </div>
+          </DialogFooter>
         </form>
-      </AlertDialogContent>
-    </AlertDialog>
+      </DialogContent>
+    </Dialog>
   )
 }

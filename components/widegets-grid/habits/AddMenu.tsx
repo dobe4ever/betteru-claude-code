@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { PlusCircle, Lightbulb, Plus, Bot } from "lucide-react"
 import useDebounce from "@/hooks/use-debounce"
 import type React from "react" // Import React
+import { useHabits } from "./HabitsContext"
 
 interface Action {
   id: string
@@ -49,13 +50,20 @@ const allActions = [
   },
 ]
 
-export function AddMenu({ actions = allActions }: { actions?: Action[] }) {
+interface AddMenuProps {
+  actions?: Action[];
+  onSelect?: (option: string) => void;
+}
+
+export function AddMenu({ actions = allActions, onSelect }: AddMenuProps) {
   const [query, setQuery] = useState("")
   const [result, setResult] = useState<SearchResult | null>(null)
   const [isFocused, setIsFocused] = useState(false)
   const [isTyping, setIsTyping] = useState(false)
   const [selectedAction, setSelectedAction] = useState<Action | null>(null)
   const debouncedQuery = useDebounce(query, 200)
+  
+  const { addHabit } = useHabits()
 
   useEffect(() => {
     if (!isFocused) {
@@ -80,6 +88,29 @@ export function AddMenu({ actions = allActions }: { actions?: Action[] }) {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value)
     setIsTyping(true)
+  }
+  
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && query.trim()) {
+      addHabit(query.trim())
+      setQuery("")
+      setIsFocused(false)
+    }
+  }
+  
+  const handleActionSelect = (action: Action) => {
+    setSelectedAction(action)
+    
+    // If this is a predefined habit, add it
+    if (action.label.includes("Suggested habit")) {
+      const habitName = action.label.replace("Suggested habit", "").trim() || "New Habit"
+      addHabit(habitName)
+      setIsFocused(false)
+    }
+    
+    if (onSelect) {
+      onSelect(action.label)
+    }
   }
 
   const container = {
@@ -162,6 +193,7 @@ export function AddMenu({ actions = allActions }: { actions?: Action[] }) {
                   placeholder="Enter a title for this card..."
                   value={query}
                   onChange={handleInputChange}
+                  onKeyDown={handleKeyDown}
                   autoFocus
                   className="w-full border-none focus:ring-0 text-sm"
                 />
@@ -173,7 +205,7 @@ export function AddMenu({ actions = allActions }: { actions?: Action[] }) {
                     className="px-3 py-2 flex items-center justify-between hover:bg-gray-50 cursor-pointer"
                     variants={item}
                     layout
-                    onClick={() => setSelectedAction(action)}
+                    onClick={() => handleActionSelect(action)}
                   >
                     <div className="flex items-center gap-2">
                       <span className="text-gray-500">{action.icon}</span>

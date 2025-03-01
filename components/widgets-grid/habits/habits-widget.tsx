@@ -1,11 +1,11 @@
-// components/widegets-grid/habits/HabitsWidget.tsx
+// components/widgets-grid/habits/habits-widget.tsx
 
 "use client"
 
-import { Widget } from "@/components/widegets-grid/widget"
-import { useHabits } from "./HabitsContext"
+import { Widget } from "@/components/widgets-grid/widget"
+import { useHabits } from "./habits-context"
 
-// HabitsWidget component
+// Habits widget component
 export function HabitsWidget({ onHabitsClick }: { onHabitsClick: () => void }) {
   const { todayCompletedCount, todayTotalCount, completionPercentage } = useHabits()
   
@@ -27,4 +27,3 @@ export function HabitsWidget({ onHabitsClick }: { onHabitsClick: () => void }) {
     </Widget>
   )
 }
-
