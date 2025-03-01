@@ -59,15 +59,25 @@
   }
 
   html, #__next {
-  font-family: "Nunito", sans-serif;
-  height: 100%;
-  font-weight: 100%; 
-  padding: 2px;
+    font-family: "Nunito", sans-serif;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
   }
 
   body {
-    @apply min-h-full;
-    margin: 0 auto;
+    @apply min-h-full w-full;
+    margin: 0;
+    padding: 0;
+    text-rendering: optimizeSpeed;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
@@ -108,58 +118,88 @@ display: none;
   }
 }
   
-/* Default styles for mobile-first approach */
+/* Mobile-first responsive design system */
+
+/* Base elements */
 .button {
-  height: 36px;
-  padding: 0 10px;
+  @apply h-9 px-2.5 md:h-10 md:px-4;
 }
 
 .icon {
-  font-size: 12px;
+  @apply text-xs md:text-sm;
 }
 
 .text {
-  font-size: 12px;
-  font-weight: 400;
+  @apply text-xs font-normal md:text-sm;
 }
 
+/* Typography system */
 .text-title-orange {
-  font-size: 20px;
-  line-height: 1.5;
-  font-weight: 900;
+  @apply text-lg md:text-xl lg:text-2xl font-black leading-normal text-center;
   -webkit-background-clip: text;
   background-clip: text;
   background-image: linear-gradient(45deg, #f04c23, #f99f1c);
-  text-align: center;
   color: transparent;
 }
 
 .text-title-white {
-  font-size: 20px;
-  line-height: 1;
-  font-weight: 700;
-  text-align: left;
-  color: white;
+  @apply text-lg md:text-xl lg:text-2xl font-bold leading-tight text-left text-white;
 }
 
 .text-title-card {
-  font-size: 14px;
-  line-height: 2;
-  text-align: left;
+  @apply text-sm md:text-base leading-relaxed text-left;
 }
 
 .text-description-card {
-  text-align: left;
-  color: #babbbc;
-  font-size: 12px;
-  line-height: 1.5;
+  @apply text-xs md:text-sm leading-normal text-left text-[#babbbc];
 }
 
 .text-big-percent-number {
-  font-size: 28px;
-  line-height: 1;
-  font-weight: 700;
-  text-align: center;
-  color: black;
+  @apply text-2xl md:text-3xl lg:text-4xl font-bold leading-none text-center text-black;
+}
+
+/* Responsive spacing utility classes */
+.responsive-p {
+  @apply p-2 sm:p-3 md:p-4 lg:p-5;
+}
+
+.responsive-m {
+  @apply m-2 sm:m-3 md:m-4 lg:m-5;
+}
+
+.responsive-gap {
+  @apply gap-2 sm:gap-3 md:gap-4;
+}
+
+/* Touch-friendly interactive elements - minimum sizes for touch targets */
+.touch-target {
+  @apply min-h-[44px] min-w-[44px];
+}
+
+/* Container constraints for different screen sizes */
+.container-mobile {
+  @apply max-w-[100%] px-3;
+}
+
+.container-tablet {
+  @apply max-w-[768px] px-4;
+}
+
+.container-desktop {
+  @apply max-w-[1024px] px-6;
+}
+
+.container-large {
+  @apply max-w-[1280px] px-8;
+}
+
+/* Safe areas for notched devices */
+@supports(padding: max(0px)) {
+  .safe-area-inset {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+    padding-top: max(1rem, env(safe-area-inset-top));
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
 }
 

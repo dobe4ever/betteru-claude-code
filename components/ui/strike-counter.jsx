@@ -39,16 +39,18 @@ export function StrikeCounter({ count = 0, className, onClick }) {
     <div 
       className={cn(
         "relative flex items-center justify-center",
-        onClick && "cursor-pointer",
+        onClick && "cursor-pointer touch-target",
         className
       )}
       onClick={handleClick}
+      role={onClick ? "button" : "presentation"}
+      aria-label={onClick ? `Streak counter: ${displayCount}` : undefined}
     >
       <div className="flex items-center">
-        <span className={cn("text-lg font-bold", getColor())}>
+        <span className={cn("text-sm sm:text-lg font-bold", getColor())}>
           {displayCount}
         </span>
-        <Flame className={cn("h-5 w-5 ml-0.5", getColor())} />
+        <Flame className={cn("h-4 w-4 sm:h-5 sm:w-5 ml-0.5", getColor())} />
       </div>
       
       {isAnimating && (
@@ -58,7 +60,7 @@ export function StrikeCounter({ count = 0, className, onClick }) {
               <div
                 key={i}
                 className={cn(
-                  "animate-ping opacity-75 text-sm",
+                  "animate-ping opacity-75 text-xs sm:text-sm",
                   getColor()
                 )}
                 style={{

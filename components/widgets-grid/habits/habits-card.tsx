@@ -39,14 +39,14 @@ export function HabitCard({ habit }: HabitCardProps) {
 
   return (
     <div className="w-full mx-auto mb-3">
-      <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm hover:shadow transition-all duration-200">
-        <div className="flex items-center w-full gap-3">
+      <div className="bg-white rounded-xl p-3 sm:p-4 border border-gray-100 shadow-sm hover:shadow transition-all duration-200">
+        <div className="flex items-center w-full gap-2 sm:gap-3">
           {/* Left Column - Checkmark */}
           <div className="flex-none">
             <button
               onClick={handleToggleCompleted}
               className={cn(
-                "group flex items-center justify-center w-11 h-11 rounded-full border-2 transition-all duration-300",
+                "group flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-full border-2 transition-all duration-300 touch-target",
                 habit.completed 
                   ? "border-orange-500 text-orange-500 bg-orange-50" 
                   : "border-gray-200 text-gray-200 hover:border-gray-300 hover:text-gray-300"
@@ -55,7 +55,7 @@ export function HabitCard({ habit }: HabitCardProps) {
             >
               <Check
                 className={cn(
-                  "w-6 h-6 transition-transform duration-300",
+                  "w-5 h-5 sm:w-6 sm:h-6 transition-transform duration-300",
                   habit.completed 
                     ? "scale-100" 
                     : "scale-75 group-hover:scale-90"
@@ -68,7 +68,7 @@ export function HabitCard({ habit }: HabitCardProps) {
           <div className="flex-grow min-w-0">
             <h3 
               className={cn(
-                "text-base font-medium truncate transition-colors duration-300",
+                "text-sm sm:text-base font-medium truncate transition-colors duration-300",
                 habit.completed ? "text-gray-400" : "text-gray-800"
               )}
             >
@@ -83,14 +83,14 @@ export function HabitCard({ habit }: HabitCardProps) {
         </div>
 
         {/* Action Icons Row */}
-        <div className="flex items-center justify-between mt-3">
-          <div className="flex items-center -ml-1.5 space-x-1">
+        <div className="flex flex-wrap items-center justify-between mt-2 sm:mt-3">
+          <div className="flex flex-wrap items-center space-x-1 sm:space-x-2">
             <Button 
               variant="ghost"
               size="sm"
               onClick={handleTogglePin}
               className={cn(
-                "h-8 w-8 p-1 rounded-full",
+                "h-9 w-9 p-0 rounded-full touch-target",
                 getIconColor(habit.pinned || false)
               )}
               aria-label={habit.pinned ? "Unpin habit" : "Pin habit"}
@@ -103,7 +103,7 @@ export function HabitCard({ habit }: HabitCardProps) {
               size="sm"
               onClick={handleToggleAlarm}
               className={cn(
-                "h-8 w-8 p-1 rounded-full",
+                "h-9 w-9 p-0 rounded-full touch-target",
                 getIconColor(habit.hasAlarm || false)
               )}
               aria-label={habit.hasAlarm ? "Remove alarm" : "Set alarm"}
@@ -116,7 +116,7 @@ export function HabitCard({ habit }: HabitCardProps) {
               size="sm"
               onClick={handleToggleRepeat}
               className={cn(
-                "h-8 w-8 p-1 rounded-full",
+                "h-9 w-9 p-0 rounded-full touch-target",
                 getIconColor(habit.repeating || false)
               )}
               aria-label={habit.repeating ? "Make non-repeating" : "Make repeating"}
@@ -127,7 +127,7 @@ export function HabitCard({ habit }: HabitCardProps) {
             <Button 
               variant="ghost" 
               size="sm"
-              className="h-8 w-8 p-1 rounded-full text-gray-300 hover:text-gray-500"
+              className="h-9 w-9 p-0 rounded-full text-gray-300 hover:text-gray-500 touch-target"
               aria-label="Add to favorites"
             >
               <Star className="h-4 w-4" />
@@ -141,7 +141,7 @@ export function HabitCard({ habit }: HabitCardProps) {
               variant="ghost"
               size="sm"
               onClick={() => setIsExpanded(!isExpanded)}
-              className="h-8 w-8 p-1 rounded-full text-gray-400 hover:text-gray-600"
+              className="h-9 w-9 p-0 rounded-full text-gray-400 hover:text-gray-600 touch-target"
               aria-label={isExpanded ? "Collapse details" : "Expand details"}
             >
               <ChevronDown
@@ -160,12 +160,12 @@ export function HabitCard({ habit }: HabitCardProps) {
             isExpanded ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
           )}
         >
-          <div className="border-t border-gray-100 mt-3 pt-3">
-            <div className="space-y-3 px-1">
+          <div className="border-t border-gray-100 mt-2 sm:mt-3 pt-2 sm:pt-3">
+            <div className="space-y-2 sm:space-y-3 px-1">
               {habit.hasAlarm && (
                 <div className="flex items-center justify-between text-gray-600">
-                  <span className="text-sm font-medium">Reminder Time</span>
-                  <span className="text-sm bg-gray-50 px-3 py-1 rounded-full">
+                  <span className="text-xs sm:text-sm font-medium">Reminder Time</span>
+                  <span className="text-xs sm:text-sm bg-gray-50 px-2 sm:px-3 py-1 rounded-full">
                     {habit.time || "Not set"}
                   </span>
                 </div>
@@ -173,16 +173,16 @@ export function HabitCard({ habit }: HabitCardProps) {
               
               {habit.repeating && (
                 <div className="flex items-center justify-between text-gray-600">
-                  <span className="text-sm font-medium">Repeats On</span>
-                  <span className="text-sm bg-gray-50 px-3 py-1 rounded-full">
+                  <span className="text-xs sm:text-sm font-medium">Repeats On</span>
+                  <span className="text-xs sm:text-sm bg-gray-50 px-2 sm:px-3 py-1 rounded-full truncate max-w-[150px] sm:max-w-none">
                     {habit.days?.join(", ") || "Every day"}
                   </span>
                 </div>
               )}
               
               <div className="flex items-center justify-between text-gray-600">
-                <span className="text-sm font-medium">Current Streak</span>
-                <span className="text-sm font-medium bg-orange-50 text-orange-600 px-3 py-1 rounded-full">
+                <span className="text-xs sm:text-sm font-medium">Current Streak</span>
+                <span className="text-xs sm:text-sm font-medium bg-orange-50 text-orange-600 px-2 sm:px-3 py-1 rounded-full">
                   {habit.streak || 0} days
                 </span>
               </div>

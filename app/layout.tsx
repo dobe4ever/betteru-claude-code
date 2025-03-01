@@ -23,8 +23,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={nunito.className}>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <meta name="google-site-verification" content="Xe9XwiEn7YaawZn4GYkJe7dtNcq2S4CqPeGbMDxNA2o" />
+      </head>
+      <body className={nunito.className}>
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
