@@ -53,7 +53,7 @@ export function HabitSettingsModal({ isOpen = false, onOpenChange }: HabitSettin
   
   return (
     <AlertDialog open={dialogOpen} onOpenChange={handleOpenChange}>
-        <AlertDialogContent className="bg-white rounded-3xl border shadow-lg p-4 h- max-w-sm">
+        <AlertDialogContent className="bg-white rounded-3xl border shadow-lg p-4 w-[90%] max-w-sm">
             
             <div className="flex justify-between items-center">
 

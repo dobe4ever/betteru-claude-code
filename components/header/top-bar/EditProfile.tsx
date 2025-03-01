@@ -146,7 +146,7 @@ export function EditProfile() {
   
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogContent className="bg-white rounded-3xl border shadow-lg mx-auto p-4 overflow-y-auto max-w-sm">
+      <AlertDialogContent className="bg-white rounded-3xl border shadow-lg mx-auto p-4 overflow-y-auto w-[90%] max-w-sm">
         <h2 className="text-2xl font-bold mb-6 text-title-orange">Edit Profile</h2>
         
         {message.text && (
