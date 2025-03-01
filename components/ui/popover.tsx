@@ -9,11 +9,28 @@ const Popover = PopoverPrimitive.Root
 
 const PopoverTrigger = PopoverPrimitive.Trigger
 
+// Custom overlay for popover
+const PopoverOverlay = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "fixed inset-0 z-40 backdrop-blur-md bg-gradient-to-br from-orange-50/60 via-white/80 to-orange-100/70 animate-in fade-in-0 data-[state=closed]:animate-out data-[state=closed]:fade-out-0",
+      className
+    )}
+    {...props}
+  />
+))
+PopoverOverlay.displayName = "PopoverOverlay"
+
 const PopoverContent = React.forwardRef<
   React.ElementRef<typeof PopoverPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>
 >(({ className, align = "center", sideOffset = 4, ...props }, ref) => (
   <PopoverPrimitive.Portal>
+    <PopoverOverlay />
     <PopoverPrimitive.Content
       ref={ref}
       align={align}
@@ -28,4 +45,4 @@ const PopoverContent = React.forwardRef<
 ))
 PopoverContent.displayName = PopoverPrimitive.Content.displayName
 
-export { Popover, PopoverTrigger, PopoverContent }
+export { Popover, PopoverTrigger, PopoverContent, PopoverOverlay }
