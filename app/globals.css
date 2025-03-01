@@ -83,7 +83,7 @@ display: none;
 }
   
 /* Default styles for mobile-first approach */
-.card {
+.button {
   height: 36px;
   padding: 0 10px;
 }
@@ -118,13 +118,15 @@ display: none;
 
 .text-title-card {
   font-size: 14px;
-  line-height: 1;
+  line-height: 2;
   text-align: left;
 }
 
 .text-description-card {
   text-align: left;
-  color: #5f6368;
+  color: #babbbc;
+  font-size: 12px;
+  line-height: 1.5;
 }
 
 .text-big-percent-number {

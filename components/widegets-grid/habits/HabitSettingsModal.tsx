@@ -53,26 +53,25 @@ export function HabitSettingsModal({ isOpen = false, onOpenChange }: HabitSettin
   
   return (
     <AlertDialog open={dialogOpen} onOpenChange={handleOpenChange}>
-        <AlertDialogContent className="max-w-md rounded-xl p-0 overflow-hidden">
-          <div className="bg-orange-50 p-4">
+        <AlertDialogContent className="bg-white rounded-3xl border shadow-lg p-4 h-[90%] w-[90%]">
+            
             <div className="flex justify-between items-center">
-              <AlertDialogHeader>
-                <AlertDialogTitle className="text-xl font-semibold text-gray-900">Edit Habit</AlertDialogTitle>
-              </AlertDialogHeader>
+
+              <span className="text-title-orange">Edit Habit</span>
+
               <AlertDialogCancel className="border-0 hover:bg-orange-100">
                 <X className="w-5 h-5" />
               </AlertDialogCancel>
             </div>
-          </div>
 
-          <div className="p-4 space-y-6">
+          <div className="p-4 space-y-">
             {/* Habit Name Input */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Habit Name</label>
+              <label className="text-title-card">Habit Name</label>
               <input
                 type="text"
                 placeholder="e.g., Morning Meditation"
-                className="w-full px-3 py-2 border border-gray-200 rounded-3xl focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="text-description-card w-full px-3 py-2 border border-gray-200 rounded-3xl focus:outline-none focus:ring-2 focus:ring-orange-500"
                 defaultValue={''}
               />
             </div>
@@ -80,8 +79,8 @@ export function HabitSettingsModal({ isOpen = false, onOpenChange }: HabitSettin
             {/* Daily Toggle */}
             <div className="flex items-center justify-between">
               <div>
-                <p className="font-medium text-gray-900">Daily Habit</p>
-                <p className="text-sm text-gray-500">Repeat this habit every day</p>
+                <p className="text-title-card">Daily Habit</p>
+                <p className="text-description-card">Repeat this habit every day</p>
               </div>
               <Switch checked={isDaily} onCheckedChange={setIsDaily} className="data-[state=checked]:bg-orange-500" />
             </div>
@@ -89,13 +88,13 @@ export function HabitSettingsModal({ isOpen = false, onOpenChange }: HabitSettin
             {/* Weekly Schedule */}
             {!isDaily && (
               <div className="space-y-3">
-                <p className="font-medium text-gray-900">Weekly Schedule</p>
+                <p className="text-title-card">Weekly Schedule</p>
                 <div className="flex gap-2">
                   {Object.entries(selectedDays).map(([day, isSelected]) => (
                     <Button
                       key={day}
                       onClick={() => handleDayToggle(day as keyof typeof selectedDays)}
-                      className={`w-8 h-8 rounded-full text-sm font-medium transition-colors
+                      className={`w-8 h-8 rounded-full text-description-card transition-colors
                         ${isSelected ? "bg-orange-500 text-white" : "bg-gray-100 text-gray-500 hover:bg-gray-200"}`}
                     >
                       {day.charAt(0).toUpperCase()}
@@ -107,22 +106,21 @@ export function HabitSettingsModal({ isOpen = false, onOpenChange }: HabitSettin
 
             {/* Time Picker */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Reminder Time</label>
+              <label className="text-title-card">Reminder Time</label>
               <div className="relative">
                 <input
                   type="time"
-                  className="w-full px-3 py-2 border border-gray-200 rounded-3xl focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="text-title-card w-full px-3 py-2 border border-gray-200 rounded-3xl focus:outline-none focus:ring-2 focus:ring-orange-500"
                   defaultValue="06:00"
                 />
-                <Clock className="absolute right-3 top-2.5 w-4 h-4 text-gray-400" />
               </div>
             </div>
 
             {/* Notes */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Notes</label>
+              <label className="text-title-card">Notes</label>
               <textarea
-                className="w-full px-3 py-2 border border-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 min-h-[100px]"
+                className="text-description-card w-full px-3 py-2 border border-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 min-h-[100px]"
                 placeholder="Add any notes or tips to help you with this habit..."
               />
             </div>
