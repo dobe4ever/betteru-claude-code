@@ -12,7 +12,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
-  DialogTrigger
+  DialogTrigger,
+  DialogPortal,
+  DialogOverlay
 } from "@/components/ui/dialog"
 import { Switch } from "@/components/ui/switch"
 import { Button } from "@/components/ui/button"
@@ -90,29 +92,67 @@ export function HabitSettingsDialog({ habit }: HabitSettingsDialogProps) {
     setIsDialogOpen(false)
   }
   
+  // Helper function to safely control dialog state
+  const safelyOpenDialog = (e) => {
+    e.stopPropagation(); // Stop event from bubbling to parent containers
+    setIsDialogOpen(true);
+  };
+
+  const safelyCloseDialog = () => {
+    // Give time for any state changes to complete before closing dialog
+    setTimeout(() => {
+      setIsDialogOpen(false);
+    }, 0);
+  };
+
   return (
-    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+    <Dialog 
+      open={isDialogOpen} 
+      onOpenChange={(open) => {
+        if (!open) {
+          safelyCloseDialog();
+        }
+      }}
+    >
       <DialogTrigger asChild>
-        <Button variant="icon" onClick={() => setIsDialogOpen(true)}>
-          <Settings />
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          className="h-8 w-8 p-0 rounded-full text-gray-400 hover:text-gray-600 touch-target"
+          onClick={safelyOpenDialog}
+          aria-label="Edit habit settings"
+        >
+          <Settings className="h-4 w-4" />
         </Button>
       </DialogTrigger>
-      <DialogContent 
-        className="bg-white rounded-3xl border shadow-lg p-4 w-[90%] max-w-sm [&>button]:hidden"
-        onInteractOutside={(e) => e.preventDefault()} // Prevent closing when clicking outside
-        onPointerDownOutside={(e) => e.preventDefault()} // Prevent closing on pointer events
-        onEscapeKeyDown={(e) => e.preventDefault()} // Prevent closing on escape key
-      >
+      <DialogPortal>
+        <DialogOverlay 
+          className="fixed inset-0 z-[200] bg-black/30" 
+          onClick={(e) => {
+            // Stop propagation to prevent closing the parent modal
+            e.stopPropagation();
+          }} 
+        />
+        <DialogContent 
+          className="fixed left-[50%] top-[50%] z-[200] translate-x-[-50%] translate-y-[-50%] bg-white rounded-3xl border shadow-lg p-4 w-[95%] max-w-sm [&>button]:hidden"
+          onEscapeKeyDown={(e) => e.preventDefault()} // Prevent escape key closing
+          onInteractOutside={(e) => {
+            e.preventDefault(); // Keep dialog open on outside clicks
+            e.stopPropagation(); // Stop propagation to parent modal
+          }} 
+          onClick={(e) => e.stopPropagation()} // Stop clicks inside dialog from bubbling
+        >
         <DialogHeader className="flex flex-row items-center justify-between px-0 space-y-0">
           <DialogTitle className="text-title-orange">Edit Habit</DialogTitle>
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className="border-0 hover:bg-orange-100 rounded-full h-8 w-8 p-1 flex items-center justify-center"
-            onClick={() => setIsDialogOpen(false)}
-          >
-            <X className="w-5 h-5" />
-          </Button>
+          <DialogClose asChild>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="border-0 hover:bg-orange-100 rounded-full h-8 w-8 p-1 flex items-center justify-center"
+            >
+              <X className="w-5 h-5" />
+            </Button>
+          </DialogClose>
         </DialogHeader>
 
         <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
@@ -128,9 +168,10 @@ export function HabitSettingsDialog({ habit }: HabitSettingsDialogProps) {
                   className="text-red-500 hover:bg-red-50 hover:text-red-600 p-1 h-8 w-8"
                   onClick={(e) => {
                     e.preventDefault();
+                    e.stopPropagation();
                     if (habit && window.confirm("Are you sure you want to delete this habit?")) {
                       deleteHabit(habit.id);
-                      setIsDialogOpen(false);
+                      safelyCloseDialog();
                     }
                   }}
                 >
@@ -210,7 +251,8 @@ export function HabitSettingsDialog({ habit }: HabitSettingsDialogProps) {
             <Button
               type="button"
               className="w-full bg-orange-500 hover:bg-orange-600"
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation();
                 if (habit) {
                   // Get the selected days as an array
                   const selectedDaysArray = Object.entries(selectedDays)
@@ -224,7 +266,7 @@ export function HabitSettingsDialog({ habit }: HabitSettingsDialogProps) {
                   });
                   
                   // Only close the dialog when explicitly saving
-                  setIsDialogOpen(false);
+                  safelyCloseDialog();
                 }
               }}
             >
@@ -234,6 +276,7 @@ export function HabitSettingsDialog({ habit }: HabitSettingsDialogProps) {
           </div>
         </form>
       </DialogContent>
+      </DialogPortal>
     </Dialog>
   )
 }
