@@ -34,7 +34,6 @@ const modalTitles: Record<string, string> = {
 export default function Home() {
   const [fadePercentage, setFadePercentage] = useState(0)
   const [activeModal, setActiveModal] = useState<string | null>(null)
-  const [isChatOpen, setIsChatOpen] = useState(false)
   const headerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -96,27 +95,8 @@ export default function Home() {
   return (
     <AuthProvider>
       <HabitsProvider>
-        {/* Chatbot button with higher z-index and ChatbotDrawer */}
-        <div
-          className="fixed bottom-4 right-4 cursor-pointer"
-          style={{ 
-            zIndex: 10000,
-            position: 'fixed',
-            pointerEvents: 'auto'
-          }}
-          onClick={() => setIsChatOpen(true)}
-        >
-          <CircleButton 
-            variant="bot"
-            className="shadow-lg"
-          />
-        </div>
-        
-        {/* Separate ChatbotDrawer component */}
-        <ChatbotDrawer 
-          isOpen={isChatOpen} 
-          onOpenChange={setIsChatOpen} 
-        />
+        {/* Self-contained ChatbotDrawer with its own trigger button */}
+        <ChatbotDrawer />
 
         <div className="relative max-h-screen w-full bg-gradient-orange">
           <div ref={headerRef} className="relative z-10">
