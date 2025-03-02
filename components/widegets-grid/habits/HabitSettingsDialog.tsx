@@ -22,15 +22,14 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { cn } from "@/lib/utils"
-import { useHabits, type Habit } from "./HabitsContext"
+import { Habit, habitsData } from "./HabitsList"
 
 interface HabitSettingsDialogProps {
-  habit?: Habit
+  habit: Habit
+  onUpdateHabit: (updates: Partial<Habit>) => void
 }
 
-export function HabitSettingsDialog({ habit }: HabitSettingsDialogProps) {
-  const { updateHabit, deleteHabit } = useHabits()
-  
+export function HabitSettingsDialog({ habit, onUpdateHabit }: HabitSettingsDialogProps) {
   const [habitTitle, setHabitTitle] = useState(habit?.title || "")
   const [isDaily, setIsDaily] = useState(true)
   const [selectedDays, setSelectedDays] = useState({
@@ -71,25 +70,6 @@ export function HabitSettingsDialog({ habit }: HabitSettingsDialogProps) {
       ...prev,
       [day]: !prev[day],
     }))
-  }
-  
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    
-    if (!habit) return
-    
-    // Get the selected days as an array
-    const selectedDaysArray = Object.entries(selectedDays)
-      .filter(([_, isSelected]) => isSelected)
-      .map(([day]) => day)
-    
-    updateHabit(habit.id, {
-      title: habitTitle,
-      time: timeValue,
-      days: isDaily ? [] : selectedDaysArray
-    })
-    
-    setIsDialogOpen(false)
   }
   
   // Helper function to safely control dialog state
@@ -169,8 +149,8 @@ export function HabitSettingsDialog({ habit }: HabitSettingsDialogProps) {
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    if (habit && window.confirm("Are you sure you want to delete this habit?")) {
-                      deleteHabit(habit.id);
+                    if (window.confirm("Are you sure you want to delete this habit?")) {
+                      habitsData.deleteHabit(habit.id);
                       safelyCloseDialog();
                     }
                   }}
@@ -253,21 +233,19 @@ export function HabitSettingsDialog({ habit }: HabitSettingsDialogProps) {
               className="w-full bg-orange-500 hover:bg-orange-600"
               onClick={(e) => {
                 e.stopPropagation();
-                if (habit) {
-                  // Get the selected days as an array
-                  const selectedDaysArray = Object.entries(selectedDays)
-                    .filter(([_, isSelected]) => isSelected)
-                    .map(([day]) => day);
-                  
-                  updateHabit(habit.id, {
-                    title: habitTitle,
-                    time: timeValue,
-                    days: isDaily ? [] : selectedDaysArray
-                  });
-                  
-                  // Only close the dialog when explicitly saving
-                  safelyCloseDialog();
-                }
+                // Get the selected days as an array
+                const selectedDaysArray = Object.entries(selectedDays)
+                  .filter(([_, isSelected]) => isSelected)
+                  .map(([day]) => day);
+                
+                onUpdateHabit({
+                  title: habitTitle,
+                  time: timeValue,
+                  days: isDaily ? [] : selectedDaysArray
+                });
+                
+                // Only close the dialog when explicitly saving
+                safelyCloseDialog();
               }}
             >
               <Check className="mr-2 h-4 w-4" />
@@ -280,4 +258,3 @@ export function HabitSettingsDialog({ habit }: HabitSettingsDialogProps) {
     </Dialog>
   )
 }
-

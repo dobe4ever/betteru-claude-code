@@ -7,19 +7,16 @@ import { Button } from "@/components/ui/button"
 import { Check, Pin, AlarmClock, Repeat, ChevronDown, Settings } from "lucide-react"
 import { HabitSettingsDialog } from "./HabitSettingsDialog"
 import { cn } from "@/lib/utils"
-import { useHabits, type Habit } from "./HabitsContext"
+import { Habit } from "./HabitsList"
 
 interface HabitCardProps {
   habit: Habit
+  onToggleCompleted: () => void
+  onUpdateHabit: (updates: Partial<Habit>) => void
 }
 
-export function HabitCard({ habit }: HabitCardProps) {
-  const { toggleCompleted, updateHabit } = useHabits()
+export function HabitCard({ habit, onToggleCompleted, onUpdateHabit }: HabitCardProps) {
   const [isExpanded, setIsExpanded] = useState(false)
-
-  const handleToggleCompleted = () => {
-    toggleCompleted(habit.id)
-  }
 
   // More compact design with minimal height
   return (
@@ -29,7 +26,7 @@ export function HabitCard({ habit }: HabitCardProps) {
           {/* Left - Checkmark */}
           <div className="flex-none">
             <button
-              onClick={handleToggleCompleted}
+              onClick={onToggleCompleted}
               className={cn(
                 "group flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all duration-300 touch-target",
                 habit.completed 
@@ -95,7 +92,10 @@ export function HabitCard({ habit }: HabitCardProps) {
             </div>
             
             {/* Settings button */}
-            <HabitSettingsDialog habit={habit} />
+            <HabitSettingsDialog 
+              habit={habit}
+              onUpdateHabit={onUpdateHabit}
+            />
             
             {/* Expand button */}
             <Button
